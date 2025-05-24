@@ -14,10 +14,11 @@
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "15.1.8",
+    "next": "15.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

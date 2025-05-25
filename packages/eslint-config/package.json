@@ -12,12 +12,12 @@
   },
   "prettier": "@repo/prettier-config",
   "exports": {
-    "./base": "./base.js",
-    "./react": "./react.js"
+    "./base": "./src/base.js",
+    "./react": "./src/react.js"
   },
   "files": [
-    "base.js",
-    "react.js"
+    "./src/base.js",
+    "./src/react.js"
   ],
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^8.0.0",

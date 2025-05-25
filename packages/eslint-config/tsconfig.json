@@ -13,6 +13,6 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["*.js", "*.mjs", "*.ts"],
+  "include": ["*.js", "*.mjs", "*.ts", "src/base.js", "src/react.js"],
   "exclude": ["node_modules"]
 }

@@ -32,6 +32,7 @@ export default tseslint.config(
           extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
       },
+      'import/internal-regex': '^@/',
     },
   },
 
@@ -120,12 +121,35 @@ export default tseslint.config(
             order: 'asc',
             caseInsensitive: true,
           },
+          pathGroups: [
+            {
+              pattern: '@/**',
+              group: 'internal',
+              position: 'before',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['builtin'],
         },
       ],
       // 重複したimportをエラーとする
       'import/no-duplicates': 'error',
       // 解決できないimportのチェックを無効化（TypeScriptが処理）
       'import/no-unresolved': 'off', // TypeScript handles this
+      // 親ディレクトリへの相対パス（../）を禁止（パスエイリアスを強制）
+      'import/no-relative-parent-imports': 'error',
+      // 同一ディレクトリ内の相対パス（./）も禁止してパスエイリアスを強制
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['./*', '../*'],
+              message:
+                '相対パスは禁止されています。パスエイリアス（@/）を使用してください。',
+            },
+          ],
+        },
+      ],
     },
   },
 
@@ -137,6 +161,7 @@ export default tseslint.config(
       '@typescript-eslint/no-var-requires': 'off',
       // JSファイルでは関数の戻り値型注釈を強制しない
       '@typescript-eslint/explicit-function-return-type': 'off',
+      'no-restricted-imports': 'off',
     },
   },
 
@@ -176,6 +201,17 @@ export default tseslint.config(
       '@typescript-eslint/no-var-requires': 'off',
       // 設定ファイルではconsole.logを許可
       'no-console': 'off',
+    },
+  },
+
+  // Storybook files override - 同一ディレクトリ内の相対パスを許可
+  {
+    files: ['**/*.stories.{js,jsx,ts,tsx}', '**/stories/**/*.{js,jsx,ts,tsx}'],
+    rules: {
+      // Storybookファイルでは同一ディレクトリ内の相対パスを許可
+      'import/no-relative-parent-imports': 'off',
+      'import/no-relative-packages': 'off',
+      'no-restricted-imports': 'off',
     },
   }
 );

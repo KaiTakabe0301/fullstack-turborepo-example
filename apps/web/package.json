@@ -55,8 +55,12 @@
     "styled-jsx": "^5.1.7",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.4"
+    "vitest": "^3.1.4",
+    "@repo/eslint-config": "workspace:^",
+    "@repo/prettier-config": "workspace:^",
+    "typescript-eslint": "^8.0.0"
   },
+  "prettier": "@repo/prettier-config",
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"

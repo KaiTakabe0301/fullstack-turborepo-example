@@ -12,7 +12,7 @@ importers:
         specifier: 2.5.3
         version: 2.5.3
 
-  apps/frontend:
+  apps/web:
     dependencies:
       next:
         specifier: 15.3.2
@@ -30,6 +30,12 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3.3.1
         version: 3.3.1
+      '@repo/eslint-config':
+        specifier: workspace:^
+        version: link:../../packages/eslint-config
+      '@repo/prettier-config':
+        specifier: workspace:^
+        version: link:../../packages/prettier-config
       '@storybook/addon-essentials':
         specifier: ^8.6.14
         version: 8.6.14(@types/react@19.1.5)(storybook@8.6.14(prettier@3.5.3))
@@ -120,9 +126,49 @@ importers:
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
+      typescript-eslint:
+        specifier: ^8.0.0
+        version: 8.32.1(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3)
       vitest:
         specifier: ^3.1.4
         version: 3.1.4(@types/node@20.17.50)(@vitest/browser@3.1.4)(jiti@1.21.7)(jsdom@26.1.0)(msw@2.8.4(@types/node@20.17.50)(typescript@5.8.3))(yaml@2.8.0)
+
+  packages/eslint-config:
+    dependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^8.0.0
+        version: 8.32.1(@typescript-eslint/parser@8.32.1(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3))(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3)
+      '@typescript-eslint/parser':
+        specifier: ^8.0.0
+        version: 8.32.1(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3)
+      eslint-plugin-import:
+        specifier: ^2.29.0
+        version: 2.31.0(@typescript-eslint/parser@8.32.1(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.27.0(jiti@1.21.7))
+      eslint-plugin-jsx-a11y:
+        specifier: ^6.8.0
+        version: 6.10.2(eslint@9.27.0(jiti@1.21.7))
+      eslint-plugin-react:
+        specifier: ^7.33.0
+        version: 7.37.5(eslint@9.27.0(jiti@1.21.7))
+      eslint-plugin-react-hooks:
+        specifier: ^5.0.0
+        version: 5.2.0(eslint@9.27.0(jiti@1.21.7))
+      typescript-eslint:
+        specifier: ^8.0.0
+        version: 8.32.1(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3)
+    devDependencies:
+      eslint:
+        specifier: ^9.0.0
+        version: 9.27.0(jiti@1.21.7)
+      typescript:
+        specifier: ^5.0.0
+        version: 5.8.3
+
+  packages/prettier-config:
+    devDependencies:
+      prettier:
+        specifier: ^3.0.0
+        version: 3.5.3
 
 packages:
 
@@ -786,9 +832,6 @@ packages:
 
   '@napi-rs/wasm-runtime@0.2.10':
     resolution: {integrity: sha512-bCsCyeZEwVErsGmyPNSzwfwFn4OdxBj0mmv6hOFucB/k81Ojdu68RbZdxYsRQUPc9l6SU5F/cG+bXgWs3oUgsQ==}
-
-  '@next/env@15.1.8':
-    resolution: {integrity: sha512-Kd9zsi2ariJvtAvA5KapkzM/Qp9eXIcVqsuUMQHu9yYmhlGa9kyklf+6TQgVGSCbzsrApKCq9olyk51SmPnyLA==}
 
   '@next/env@15.3.2':
     resolution: {integrity: sha512-xURk++7P7qR9JG1jJtLzPzf0qEvqCN0A/T3DXf8IPMKo9/6FfjxtEffRJIIew/bIL4T3C2jLLqBor8B/zVlx6g==}
@@ -3406,6 +3449,13 @@ packages:
     resolution: {integrity: sha512-3KS2b+kL7fsuk/eJZ7EQdnEmQoaho/r6KUef7hxvltNA5DR8NAUM+8wJMbJyZ4G9/7i3v5zPBIMN5aybAh2/Jg==}
     engines: {node: '>= 0.4'}
 
+  typescript-eslint@8.32.1:
+    resolution: {integrity: sha512-D7el+eaDHAmXvrZBy1zpzSNIRqnCOrkwTgZxTu3MUqRWk8k0q9m9Ho4+vPf7iHtgUfrK/o8IZaEApsxPlHTFCg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    peerDependencies:
+      eslint: ^8.57.0 || ^9.0.0
+      typescript: '>=4.8.4 <5.9.0'
+
   typescript@5.8.3:
     resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
     engines: {node: '>=14.17'}
@@ -4215,8 +4265,6 @@ snapshots:
       '@emnapi/runtime': 1.4.3
       '@tybys/wasm-util': 0.9.0
     optional: true
-
-  '@next/env@15.1.8': {}
 
   '@next/env@15.3.2': {}
 
@@ -7156,6 +7204,16 @@ snapshots:
       possible-typed-array-names: 1.1.0
       reflect.getprototypeof: 1.0.10
 
+  typescript-eslint@8.32.1(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3):
+    dependencies:
+      '@typescript-eslint/eslint-plugin': 8.32.1(@typescript-eslint/parser@8.32.1(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3))(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3)
+      '@typescript-eslint/parser': 8.32.1(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3)
+      '@typescript-eslint/utils': 8.32.1(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3)
+      eslint: 9.27.0(jiti@1.21.7)
+      typescript: 5.8.3
+    transitivePeerDependencies:
+      - supports-color
+
   typescript@5.8.3: {}
 
   unbox-primitive@1.1.0:
@@ -7248,7 +7306,7 @@ snapshots:
 
   vite-plugin-storybook-nextjs@1.1.5(@storybook/test@8.6.14(storybook@8.6.14(prettier@3.5.3)))(next@15.3.2(@babel/core@7.27.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(storybook@8.6.14(prettier@3.5.3))(vite@6.3.5(@types/node@20.17.50)(jiti@1.21.7)(yaml@2.8.0)):
     dependencies:
-      '@next/env': 15.1.8
+      '@next/env': 15.3.2
       '@storybook/test': 8.6.14(storybook@8.6.14(prettier@3.5.3))
       image-size: 2.0.2
       magic-string: 0.30.17

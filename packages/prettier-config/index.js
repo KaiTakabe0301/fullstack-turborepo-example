@@ -36,11 +36,11 @@ module.exports = {
   rangeStart: 0,
   rangeEnd: Infinity,
 
-  // パーサーを指定（通常は自動検出）
-  parser: undefined,
+  // パーサーを指定（通常は自動検出のためコメントアウト）
+  // parser: undefined,
 
-  // ファイルパスを指定（通常は自動検出）
-  filepath: undefined,
+  // ファイルパスを指定（通常は自動検出のためコメントアウト）
+  // filepath: undefined,
 
   // Prettierが処理する必要があるかどうかを判断
   requirePragma: false,

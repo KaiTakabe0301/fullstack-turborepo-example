@@ -1,22 +1,19 @@
-import React from 'react';
+import { usePage } from '@/stories/usePage';
 
 import { Header } from './Header';
+
 import './page.css';
 
-interface User {
-  name: string;
-}
-
 export function Page() {
-  const [user, setUser] = React.useState<User>();
+  const { user, handleCreateAccount, handleLogin, handleLogout } = usePage();
 
   return (
     <article>
       <Header
         user={user}
-        onLogin={() => setUser({ name: 'Jane Doe' })}
-        onLogout={() => setUser(undefined)}
-        onCreateAccount={() => setUser({ name: 'Jane Doe' })}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
+        onCreateAccount={handleCreateAccount}
       />
 
       <section className='storybook-page'>

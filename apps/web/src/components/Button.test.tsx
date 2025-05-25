@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+
 import { Button } from './Button';
 
 describe('Button', () => {
@@ -25,7 +26,7 @@ describe('Button', () => {
   });
 
   it('applies secondary variant classes when specified', () => {
-    render(<Button variant="secondary">Secondary Button</Button>);
+    render(<Button variant='secondary'>Secondary Button</Button>);
     const button = screen.getByRole('button');
     expect(button).toHaveClass('bg-gray-200', 'text-gray-800');
   });

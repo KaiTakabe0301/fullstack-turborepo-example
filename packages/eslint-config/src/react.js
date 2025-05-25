@@ -4,7 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactPerfPlugin from 'eslint-plugin-react-perf';
 
 import baseConfig from './base.js';
-import * as customRulesPlugin from './rules/index.js';
+import customRulesPlugin from './rules/index.js';
 
 export default [
   // ベース設定を継承

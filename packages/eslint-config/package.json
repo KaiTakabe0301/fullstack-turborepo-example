@@ -32,7 +32,8 @@
     "eslint": "^9.0.0",
     "typescript": "^5.0.0",
     "prettier": "^3.0.0",
-    "@repo/prettier-config": "workspace:^"
+    "@repo/prettier-config": "workspace:^",
+    "eslint-config-prettier": "^10.1.5"
   },
   "peerDependencies": {
     "eslint": ">=9.0.0",

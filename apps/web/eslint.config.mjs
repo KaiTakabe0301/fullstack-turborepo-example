@@ -2,7 +2,7 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
 import reactConfig from '@repo/eslint-config/react';
-import tseslint from 'typescript-eslint';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -47,8 +47,6 @@ function excludePlugins(configs, pluginNamesToExclude) {
 // 事前に読み込まれる設定を準備
 const nextConfigs = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
-  ...compat.extends('prettier'),
-  ...compat.plugins('prettier'),
   ...compat.extends('plugin:storybook/recommended'),
 ];
 
@@ -73,7 +71,6 @@ const eslintConfig = [
       },
     },
     rules: {
-      'prettier/prettier': 'error',
       '@next/next/no-html-link-for-pages': 'error',
       '@next/next/no-img-element': 'warn',
     },
@@ -96,6 +93,8 @@ const eslintConfig = [
       'no-console': 'off',
     },
   },
+
+  eslintConfigPrettier,
 ];
 
 export default eslintConfig;

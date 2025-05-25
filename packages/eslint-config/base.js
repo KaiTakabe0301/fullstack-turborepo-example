@@ -44,7 +44,10 @@ export default tseslint.config(
     rules: {
       // TypeScript specific rules
       // 使用されていない変数をエラーとする（_で始まる引数は除外）
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
       // any型の使用を警告
       '@typescript-eslint/no-explicit-any': 'warn',
       // 関数の戻り値の型注釈を強制しない
@@ -95,9 +98,9 @@ export default tseslint.config(
       // テンプレートリテラルの使用を推奨
       'prefer-template': 'error',
       // 厳密等価演算子（===）の使用を強制
-      'eqeqeq': ['error', 'always'],
+      eqeqeq: ['error', 'always'],
       // if文等で波括弧の使用を強制
-      'curly': ['error', 'all'],
+      curly: ['error', 'all'],
 
       // Import rules
       // importの順序を強制（builtin → external → internal → parent → sibling → index）

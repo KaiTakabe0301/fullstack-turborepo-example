@@ -4,7 +4,11 @@
   "private": true,
   "description": "Shared ESLint configuration for TypeScript projects",
   "type": "module",
-  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "prettier": "@repo/prettier-config",
   "exports": {
     "./base": "./base.js",
     "./react": "./react.js"
@@ -24,7 +28,9 @@
   },
   "devDependencies": {
     "eslint": "^9.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "prettier": "^3.0.0",
+    "@repo/prettier-config": "workspace:^"
   },
   "peerDependencies": {
     "eslint": ">=9.0.0",

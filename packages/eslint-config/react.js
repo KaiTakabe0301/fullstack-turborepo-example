@@ -1,7 +1,8 @@
-import baseConfig from './base.js';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
+
+import baseConfig from './base.js';
 
 export default [
   // ベース設定を継承

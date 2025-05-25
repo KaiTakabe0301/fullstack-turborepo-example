@@ -136,7 +136,12 @@ export default tseslint.config(
       // 解決できないimportのチェックを無効化（TypeScriptが処理）
       'import/no-unresolved': 'off', // TypeScript handles this
       // 親ディレクトリへの相対パス（../）を禁止（パスエイリアスを強制）
-      'import/no-relative-parent-imports': 'error',
+      'import/no-relative-parent-imports': [
+        'error',
+        {
+          ignore: ['\\.css$', '\\.scss$', '\\.sass$', '\\.less$'],
+        },
+      ],
       // 同一ディレクトリ内の相対パス（./）も禁止してパスエイリアスを強制
       'no-restricted-imports': [
         'error',

@@ -26,14 +26,15 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-perf": "^3.3.3",
     "typescript-eslint": "^8.0.0"
   },
   "devDependencies": {
-    "eslint": "^9.0.0",
-    "typescript": "^5.0.0",
-    "prettier": "^3.0.0",
     "@repo/prettier-config": "workspace:^",
-    "eslint-config-prettier": "^10.1.5"
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^10.1.5",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
   },
   "peerDependencies": {
     "eslint": ">=9.0.0",

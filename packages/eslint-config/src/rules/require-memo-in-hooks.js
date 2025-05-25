@@ -34,18 +34,97 @@ function isMemoed(node) {
   );
 }
 
+/**
+ * 生成するラッパー文字列と必要なフック名を返す
+ */
+function buildWrapper(node, sourceCode) {
+  const original = sourceCode.getText(node);
+
+  if (node.type === 'ObjectExpression' || node.type === 'ArrayExpression') {
+    return { text: `useMemo(() => ${original}, [])`, hookName: 'useMemo' };
+  }
+  return { text: `useCallback(${original}, [])`, hookName: 'useCallback' };
+}
+
+/**
+ * ファイル内の `import … from 'react'` を解析し、
+ * 指定 hook が未インポートなら Fixer 配列を返す
+ */
+function ensureReactImport(fixer, sourceCode, hookName) {
+  const program = sourceCode.ast; // ESTree Program
+  const reactImport = program.body.find(
+    n => n.type === 'ImportDeclaration' && n.source.value === 'react'
+  );
+
+  // import が無い場合は先頭に追加
+  if (!reactImport) {
+    // 'use client'; などの directive を飛ばす
+    const firstNode = program.body[0];
+    const insertPos =
+      firstNode &&
+      firstNode.type === 'ExpressionStatement' &&
+      firstNode.directive
+        ? firstNode.range[1] + 1
+        : 0;
+    return [
+      fixer.insertTextAfterRange(
+        [0, insertPos],
+        `import { ${hookName} } from 'react';\n`
+      ),
+    ];
+  }
+
+  // 既に同 hook が import 済みか？
+  const hasNamed = reactImport.specifiers.some(
+    s => s.type === 'ImportSpecifier' && s.imported.name === hookName
+  );
+  if (hasNamed) return []; // 追加不要
+
+  // ----------------------------------------------------------
+  // ① すでに { foo } がある → '... foo }' の直前に `, hookName`
+  // ----------------------------------------------------------
+  const namedSpecs = reactImport.specifiers.filter(
+    s => s.type === 'ImportSpecifier'
+  );
+
+  if (namedSpecs.length > 0) {
+    // } のトークンを探す
+    const closeBrace = sourceCode.getTokenAfter(
+      namedSpecs[namedSpecs.length - 1],
+      token => token.value === '}'
+    );
+    return [fixer.insertTextBefore(closeBrace, `, ${hookName}`)];
+  }
+
+  // ----------------------------------------------------------
+  // ② default / namespace しか無い → 新しい named import を追加
+  //     import React from 'react';  →  import React, { hookName } from 'react';
+  //     import * as React from 'react';  →  import * as React, { hookName } from 'react';
+  // ----------------------------------------------------------
+  const fromToken = sourceCode.getTokenAfter(
+    reactImport.specifiers[reactImport.specifiers.length - 1],
+    token => token.value === 'from'
+  );
+
+  // fromの前に { hookName } を挿入
+  return [fixer.insertTextBefore(fromToken, `, { ${hookName} } `)];
+}
+
 // ---------------------------------------------------------------------------
 // rule
 // ---------------------------------------------------------------------------
 export const requireMemoInHooksRule = createRule({
   name: 'require-memo-in-hooks',
   meta: {
-    type: 'suggestion',
+    type: 'problem',
     docs: {
       description:
         'Enforce wrapping new objects / arrays / functions with useMemo or useCallback inside custom hooks.',
       recommended: 'error',
     },
+
+    fixable: 'code',
+    hasSuggestions: true,
     messages: {
       useMemo:
         'Wrap this value with useMemo or useCallback inside custom hooks.',
@@ -56,9 +135,7 @@ export const requireMemoInHooksRule = createRule({
   create(context) {
     return {
       // すべての関数 (宣言 / 式 / アロー) を捕捉
-      'FunctionDeclaration, FunctionExpression, ArrowFunctionExpression'(
-        node
-      ) {
+      'FunctionDeclaration, FunctionExpression, ArrowFunctionExpression'(node) {
         // 関数名を取得
         const name =
           node.id?.name ??
@@ -80,18 +157,37 @@ export const requireMemoInHooksRule = createRule({
 
           statement.declarations.forEach(decl => {
             const init = decl.init;
-            if (!init) return; // 初期化子なし
+            if (!init || isMemoed(init) || !isNewValue(init)) return;
 
-            // すでに useMemo / useCallback なら OK
-            if (isMemoed(init)) return;
-
-            // “新規生成値” がそのまま束縛されていたらエラー
-            if (isNewValue(init)) {
-              context.report({
-                node: init,
-                messageId: 'useMemo',
-              });
-            }
+            context.report({
+              node: init,
+              messageId: 'useMemo',
+              fix: fixer => {
+                const src = context.getSourceCode();
+                const { text, hookName } = buildWrapper(init, src);
+                return [
+                  // 1) 変数初期化子を置換
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                  fixer.replaceText(init, text),
+                  // 2) 必要に応じて import 追加 / 編集
+                  ...ensureReactImport(fixer, src, hookName),
+                ];
+              },
+              suggest: [
+                {
+                  messageId: 'useMemo',
+                  fix: fixer => {
+                    const src = context.getSourceCode();
+                    const { text, hookName } = buildWrapper(init, src);
+                    return [
+                      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                      fixer.replaceText(init, text),
+                      ...ensureReactImport(fixer, src, hookName),
+                    ];
+                  },
+                },
+              ],
+            });
           });
         });
       },

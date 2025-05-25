@@ -5,8 +5,13 @@
   "description": "Shared ESLint configuration for TypeScript projects",
   "type": "module",
   "main": "index.js",
+  "exports": {
+    "./base": "./base.js",
+    "./react": "./react.js"
+  },
   "files": [
-    "index.js"
+    "base.js",
+    "react.js"
   ],
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^8.0.0",

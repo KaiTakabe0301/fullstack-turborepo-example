@@ -1,9 +1,6 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import importPlugin from 'eslint-plugin-import';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
 
 export default tseslint.config(
   // Base configurations
@@ -16,11 +13,6 @@ export default tseslint.config(
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
       globals: {
         console: 'readonly',
         process: 'readonly',
@@ -34,9 +26,6 @@ export default tseslint.config(
       },
     },
     settings: {
-      react: {
-        version: 'detect',
-      },
       'import/resolver': {
         typescript: {},
         node: {
@@ -51,9 +40,6 @@ export default tseslint.config(
     files: ['**/*.{js,jsx,ts,tsx}'],
     plugins: {
       import: importPlugin,
-      'jsx-a11y': jsxA11y,
-      react,
-      'react-hooks': reactHooks,
     },
     rules: {
       // TypeScript specific rules
@@ -109,21 +95,6 @@ export default tseslint.config(
       ],
       'import/no-duplicates': 'error',
       'import/no-unresolved': 'off', // TypeScript handles this
-
-      // React rules
-      'react/jsx-uses-react': 'error',
-      'react/jsx-uses-vars': 'error',
-      'react/prop-types': 'off', // TypeScript handles this
-      'react/react-in-jsx-scope': 'off', // Not needed in React 17+
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-
-      // Accessibility rules
-      'jsx-a11y/alt-text': 'error',
-      'jsx-a11y/anchor-has-content': 'error',
-      'jsx-a11y/anchor-is-valid': 'error',
-      'jsx-a11y/click-events-have-key-events': 'warn',
-      'jsx-a11y/no-static-element-interactions': 'warn',
     },
   },
 

@@ -1,7 +1,7 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
-import baseConfig from '@repo/eslint-config';
+import reactConfig from '@repo/eslint-config/react';
 import tseslint from 'typescript-eslint';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -32,7 +32,9 @@ function excludePlugins(configs, pluginNamesToExclude) {
     if (!cfg.plugins) return cfg;
 
     const remaining = Object.fromEntries(
-      Object.entries(cfg.plugins).filter(([name]) => !pluginNamesToExclude.has(name))
+      Object.entries(cfg.plugins).filter(
+        ([name]) => !pluginNamesToExclude.has(name)
+      )
     );
 
     const { plugins, ...rest } = cfg;
@@ -58,7 +60,7 @@ const eslintConfig = [
   ...nextConfigs,
 
   // 共通ESLint設定を適用（重複するpluginを除外して展開）
-  ...excludePlugins(baseConfig, alreadyLoadedPlugins),
+  ...excludePlugins(reactConfig, alreadyLoadedPlugins),
 
   // プロジェクト固有の設定
   {

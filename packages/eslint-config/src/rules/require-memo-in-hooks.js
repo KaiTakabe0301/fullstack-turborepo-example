@@ -93,6 +93,8 @@ function ensureReactImport(fixer, sourceCode, hookName) {
       namedSpecs[namedSpecs.length - 1],
       token => token.value === '}'
     );
+
+    // 既存のnamed importに追加
     return [fixer.insertTextBefore(closeBrace, `, ${hookName}`)];
   }
 

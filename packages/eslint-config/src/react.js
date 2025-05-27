@@ -62,7 +62,8 @@ export default [
       'jsx-a11y/anchor-is-valid': 'error',
       'jsx-a11y/click-events-have-key-events': 'warn',
       'jsx-a11y/no-static-element-interactions': 'warn',
-      'custom-hooks/require-memo-in-hooks': 'error',
+      'custom-hooks/require-use-memo-in-hooks': 'error',
+      'custom-hooks/require-use-callback-in-hooks': 'error',
     },
   },
 ];

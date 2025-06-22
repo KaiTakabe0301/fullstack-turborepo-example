@@ -30,6 +30,7 @@
     "typescript-eslint": "^8.0.0"
   },
   "devDependencies": {
+    "@arthurgeron/eslint-plugin-react-usememo": "^2.5.0",
     "@repo/prettier-config": "workspace:^",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^10.1.5",

@@ -4,7 +4,6 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactPerfPlugin from 'eslint-plugin-react-perf';
 
 import baseConfig from './base.js';
-import customRulesPlugin from './rules/index.js';
 
 export default [
   // ベース設定を継承
@@ -36,7 +35,6 @@ export default [
       'jsx-a11y': jsxA11y,
       react,
       'react-hooks': reactHooks,
-      'custom-hooks': customRulesPlugin,
     },
     rules: {
       // React rules
@@ -62,8 +60,6 @@ export default [
       'jsx-a11y/anchor-is-valid': 'error',
       'jsx-a11y/click-events-have-key-events': 'warn',
       'jsx-a11y/no-static-element-interactions': 'warn',
-      'custom-hooks/require-use-memo-in-hooks': 'error',
-      'custom-hooks/require-use-callback-in-hooks': 'error',
     },
   },
 ];

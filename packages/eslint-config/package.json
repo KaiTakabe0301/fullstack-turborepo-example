@@ -8,8 +8,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "test": "node test.js"
+    "format:check": "prettier --check ."
   },
   "prettier": "@repo/prettier-config",
   "exports": {

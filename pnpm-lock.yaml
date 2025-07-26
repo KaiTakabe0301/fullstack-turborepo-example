@@ -132,6 +132,9 @@ importers:
 
   packages/eslint-config:
     dependencies:
+      '@kaitakabe0301/eslint-plugin-react-memo':
+        specifier: ^1.0.2
+        version: 1.0.2(eslint@9.27.0(jiti@1.21.7))
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.0.0
         version: 8.32.1(@typescript-eslint/parser@8.32.1(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3))(eslint@9.27.0(jiti@1.21.7))(typescript@5.8.3)
@@ -836,6 +839,12 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
+
+  '@kaitakabe0301/eslint-plugin-react-memo@1.0.2':
+    resolution: {integrity: sha512-sRwedUmOvNZbbRHds6yAJpu+Yu1PbRxVkaOfzbSZb83Uq70t4ePyspRtq9cT8k13XKWmpg+FO8wAQkniVg59sA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      eslint: '>=8.0.0 || ^9.0.0'
 
   '@mdx-js/react@3.1.0':
     resolution: {integrity: sha512-QjHtSaoameoalGnKDT3FoIl4+9RwyTmo9ZJGBdLOks/YOiWHoRDI3PUwEzOE7kEmGcV3AFcp9K6dYu9rEuKLAQ==}
@@ -4247,6 +4256,10 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@kaitakabe0301/eslint-plugin-react-memo@1.0.2(eslint@9.27.0(jiti@1.21.7))':
+    dependencies:
+      eslint: 9.27.0(jiti@1.21.7)
 
   '@mdx-js/react@3.1.0(@types/react@19.1.5)(react@19.1.0)':
     dependencies:

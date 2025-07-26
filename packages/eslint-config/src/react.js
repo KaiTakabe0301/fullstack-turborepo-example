@@ -1,4 +1,4 @@
-import reactUseMemo from '@arthurgeron/eslint-plugin-react-usememo';
+import reactMemoPlugin from '@kaitakabe0301/eslint-plugin-react-memo';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -36,7 +36,7 @@ export default [
       'jsx-a11y': jsxA11y,
       react,
       'react-hooks': reactHooks,
-      '@arthurgeron/react-usememo': reactUseMemo,
+      '@kaitakabe0301/react-memo': reactMemoPlugin.flatConfig,
     },
     rules: {
       // React rules
@@ -63,8 +63,8 @@ export default [
       'jsx-a11y/click-events-have-key-events': 'warn',
       'jsx-a11y/no-static-element-interactions': 'warn',
 
-      // Memoization rules - カスタムフック内でのメモ化を強制
-      '@arthurgeron/react-usememo/require-usememo': ['error'],
+      '@kaitakabe0301/react-memo/require-usecallback': 'error',
+      '@kaitakabe0301/react-memo/require-usememo': 'error',
     },
   },
 ];

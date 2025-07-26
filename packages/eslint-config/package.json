@@ -20,6 +20,7 @@
     "./src/react.js"
   ],
   "dependencies": {
+    "@kaitakabe0301/eslint-plugin-react-memo": "^1.0.2",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "eslint-plugin-import": "^2.29.0",

@@ -1,6 +1,6 @@
 # GraphQL Code Generation
 
-このプロジェクトでは、GraphQL Code Generatorを使用してTypeScriptの型定義とReact Hooksを自動生成しています。
+このプロジェクトでは、GraphQL Code Generator v5を使用してTypeScriptの型定義とクライアントコードを自動生成しています。最新のclientプリセットを使用し、より良い開発体験と小さいバンドルサイズを実現しています。
 
 ## セットアップ
 
@@ -39,11 +39,14 @@ pnpm codegen:watch
 
 ### 1. GraphQLクエリの定義
 
-`src/graphql/queries/users.ts`:
-```typescript
-import { gql } from '@apollo/client';
+clientプリセットでは、`graphql()`関数を使用してクエリを定義します：
 
-export const GET_USERS = gql`
+`src/graphql/queries.ts`:
+
+```typescript
+import { graphql } from '@/gql';
+
+export const GET_USERS = graphql(/* GraphQL */ `
   query GetUsers {
     users {
       id
@@ -54,9 +57,9 @@ export const GET_USERS = gql`
       updatedAt
     }
   }
-`;
+`);
 
-export const CREATE_USER = gql`
+export const CREATE_USER = graphql(/* GraphQL */ `
   mutation CreateUser($input: CreateUserInput!) {
     createUser(createUserInput: $input) {
       id
@@ -65,17 +68,20 @@ export const CREATE_USER = gql`
       role
     }
   }
-`;
+`);
 ```
 
-### 2. 生成された型とHooksの使用
+### 2. 生成されたコードの使用
+
+Apollo Clientと組み合わせて使用します：
 
 ```typescript
-import { useGetUsersQuery, useCreateUserMutation } from '@/generated/graphql';
+import { useQuery, useMutation } from '@apollo/client';
+import { GET_USERS, CREATE_USER } from '@/graphql/queries';
 
 export function UserList() {
-  const { data, loading, error } = useGetUsersQuery();
-  const [createUser, { loading: creating }] = useCreateUserMutation();
+  const { data, loading, error } = useQuery(GET_USERS);
+  const [createUser, { loading: creating }] = useMutation(CREATE_USER);
 
   const handleCreateUser = async () => {
     await createUser({
@@ -110,26 +116,38 @@ export function UserList() {
 
 ## 設定ファイル
 
-`codegen.yml`の詳細：
+`codegen.ts`（TypeScript形式）の詳細：
 
-```yaml
-overwrite: true                    # 既存のファイルを上書き
-schema: "http://localhost:3001/graphql"  # GraphQLスキーマのURL
-documents: "src/**/*.{ts,tsx}"     # GraphQL操作を含むファイル
-generates:
-  src/generated/graphql.ts:        # 出力ファイル
-    plugins:
-      - "typescript"               # 基本的なTypeScript型
-      - "typescript-operations"    # クエリ・ミューテーション用の型
-      - "typescript-react-apollo"  # React Hooks
-    config:
-      withHooks: true              # Hooksを生成
-      withComponent: false         # コンポーネントは生成しない
-      withHOC: false              # HOCは生成しない
-      scalars:
-        DateTime: string           # カスタムスカラー型のマッピング
-        Date: string
+```typescript
+import type { CodegenConfig } from '@graphql-codegen/cli';
+
+const config: CodegenConfig = {
+  overwrite: true, // 既存のファイルを上書き
+  schema: 'http://localhost:3001/graphql', // GraphQLスキーマのURL
+  documents: 'src/**/*.{ts,tsx}', // GraphQL操作を含むファイル
+  generates: {
+    'src/gql/': {
+      // 出力ディレクトリ
+      preset: 'client', // clientプリセットを使用
+      config: {
+        useTypeImports: true, // TypeScriptのtype importを使用
+        scalars: {
+          Date: 'DateString', // カスタムスカラー型のマッピング
+        },
+      },
+    },
+  },
+};
+
+export default config;
 ```
+
+### 旧設定からの主な変更点
+
+1. **設定ファイル形式**: `codegen.yml`（YAML） → `codegen.ts`（TypeScript）
+2. **プリセット**: 個別プラグイン → `client`プリセット
+3. **生成先**: `src/generated/graphql.ts` → `src/gql/`ディレクトリ
+4. **API**: カスタムHooks → `graphql()`関数とApollo Clientの標準Hooks
 
 ## トラブルシューティング
 
@@ -144,5 +162,16 @@ GraphQLクエリやミューテーションが定義されていない場合に�
 ### 型が更新されない
 
 1. `pnpm codegen`を再実行
-2. 生成されたファイル（`src/generated/graphql.ts`）を削除して再生成
+2. 生成されたディレクトリ（`src/gql/`）を削除して再生成
 3. バックエンドのスキーマが更新されていることを確認
+
+### 生成されたファイルについて
+
+`src/gql/`ディレクトリには以下のファイルが生成されます：
+
+- `graphql.ts`: 型定義
+- `gql.ts`: graphql関数の定義
+- `fragment-masking.ts`: フラグメント用ユーティリティ
+- `index.ts`: エクスポート用インデックス
+
+これらのファイルは自動生成されるため、`.gitignore`に追加することを推奨します。

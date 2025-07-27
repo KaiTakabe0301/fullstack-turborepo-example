@@ -16,8 +16,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "check-types": "tsc --noEmit",
-    "codegen": "graphql-codegen --config codegen.yml",
-    "codegen:watch": "graphql-codegen --config codegen.yml --watch"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "codegen:watch": "graphql-codegen --config codegen.ts --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.11.11",
@@ -30,10 +30,8 @@
     "@chromatic-com/storybook": "^3.2.6",
     "@eslint/eslintrc": "^3.3.1",
     "@graphql-codegen/cli": "^5.0.3",
-    "@graphql-codegen/client-preset": "^4.5.1",
-    "@graphql-codegen/typescript": "^4.1.2",
-    "@graphql-codegen/typescript-operations": "^4.4.0",
-    "@graphql-codegen/typescript-react-apollo": "^4.3.2",
+    "@graphql-codegen/client-preset": "^4.8.3",
+    "@graphql-codegen/typed-document-node": "^5.1.2",
     "@repo/eslint-config": "workspace:^",
     "@repo/prettier-config": "workspace:^",
     "@storybook/addon-essentials": "^8.6.14",
@@ -56,6 +54,7 @@
     "eslint-config-next": "15.1.8",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-storybook": "^0.12.0",
+    "graphql-scalars": "^1.24.2",
     "jsdom": "^26.1.0",
     "msw": "^2.8.4",
     "playwright": "^1.52.0",

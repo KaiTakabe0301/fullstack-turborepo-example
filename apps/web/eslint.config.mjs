@@ -59,7 +59,9 @@ const eslintConfig = [
 
   // 共通ESLint設定を適用（重複するpluginを除外して展開）
   ...excludePlugins(reactConfig, alreadyLoadedPlugins),
-
+  {
+    ignores: ['**/generated/**', '**/dist/**', '**/node_modules/**'],
+  },
   // プロジェクト固有の設定
   {
     files: ['**/*.{js,jsx,ts,tsx}'],

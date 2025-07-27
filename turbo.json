@@ -2,13 +2,14 @@
   "$schema": "https://turborepo.com/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": ["^build", "db:generate"],
+      "dependsOn": ["^build", "codegen"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
     },
     "dev": {
+      "dependsOn": ["codegen"],
       "persistent": true,
       "cache": false
     },
@@ -34,8 +35,21 @@
       "inputs": ["prisma/schema.prisma"],
       "cache": false
     },
+    "db:migrate:dev": {
+      "inputs": ["prisma/schema.prisma"],
+      "cache": false
+    },
     "db:studio": {
       "persistent": true,
+      "cache": false
+    },
+    "codegen": {
+      "dependsOn": ["generate:schema"],
+      "outputs": ["src/generated/**", "src/__generated__/**"]
+    },
+    "generate:schema": {
+      "dependsOn": ["db:migrate:dev"],
+      "outputs": ["src/generated/schema.graphql"],
       "cache": false
     }
   }

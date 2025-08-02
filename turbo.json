@@ -35,10 +35,6 @@
       "cache": false,
       "persistent": true
     },
-    "db:studio": {
-      "persistent": true,
-      "cache": false
-    },
     "@fste/web#codegen": {
       "dependsOn": ["@repo/web-api#generate:schema"],
       "cache": false

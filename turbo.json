@@ -2,14 +2,14 @@
   "$schema": "https://turborepo.com/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": ["^build", "codegen"],
+      "dependsOn": ["^build", "@fste/web#codegen"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
     },
     "dev": {
-      "dependsOn": ["codegen"],
+      "dependsOn": ["@fste/web#codegen"],
       "persistent": true,
       "cache": false
     },
@@ -24,7 +24,6 @@
       "dependsOn": ["^lint"]
     },
     "db:generate": {
-      "inputs": ["prisma/schema.prisma"],
       "cache": false
     },
     "db:push": {
@@ -33,23 +32,19 @@
     },
     "db:migrate": {
       "inputs": ["prisma/schema.prisma"],
-      "cache": false
-    },
-    "db:migrate:dev": {
-      "inputs": ["prisma/schema.prisma"],
-      "cache": false
+      "cache": false,
+      "persistent": true
     },
     "db:studio": {
       "persistent": true,
       "cache": false
     },
-    "codegen": {
-      "dependsOn": ["generate:schema"],
-      "outputs": ["src/generated/**", "src/__generated__/**"]
+    "@fste/web#codegen": {
+      "dependsOn": ["@repo/web-api#generate:schema"],
+      "cache": false
     },
     "generate:schema": {
-      "dependsOn": ["db:migrate:dev"],
-      "outputs": ["src/generated/schema.graphql"],
+      "dependsOn": ["@repo/database#db:generate"],
       "cache": false
     }
   }

@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "turbo dev",
+    "dev": "turbo db:migrate && turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "turbo test",
+    "generate:schema": "turbo generate:schema",
+    "codegen": "turbo generate:schema && turbo codegen",
     "db:generate": "turbo db:generate",
     "db:push": "turbo db:push",
     "db:migrate": "turbo db:migrate",

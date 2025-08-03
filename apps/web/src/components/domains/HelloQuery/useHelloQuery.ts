@@ -1,7 +1,6 @@
 import { useLazyQuery } from '@apollo/client/react';
+import { graphql } from 'gql.tada';
 import { useCallback, useMemo } from 'react';
-
-import { graphql } from '@/graphql/__generated__/gql';
 
 export const GET_HELLO = graphql(`
   query getHello {

@@ -1,7 +1,7 @@
 // GraphQL操作定義
-// このファイルはcodegenが正しく動作するために必要です
+// gql.tadaを使用した型安全なGraphQLクエリ
 
-import { graphql } from '@/graphql/__generated__/gql';
+import { graphql } from 'gql.tada';
 
 export const GET_HELLO = graphql(`
   query getHello {

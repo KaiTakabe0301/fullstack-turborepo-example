@@ -32,6 +32,7 @@
     "@graphql-codegen/cli": "^5.0.3",
     "@graphql-codegen/client-preset": "^4.8.3",
     "@graphql-codegen/typed-document-node": "^5.1.2",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@repo/eslint-config": "workspace:^",
     "@repo/prettier-config": "workspace:^",
     "@storybook/addon-essentials": "^8.6.14",

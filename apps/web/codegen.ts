@@ -20,7 +20,8 @@ const config: CodegenConfig = {
       plugins: [
         {
           add: {
-            content: `export * from "@/graphql/__generated__/fragment-masking";
+            content: `/* eslint-disable */
+export * from "@/graphql/__generated__/fragment-masking";
 export * from "@/graphql/__generated__/gql";`,
           },
         },

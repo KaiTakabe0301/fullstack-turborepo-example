@@ -5,6 +5,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { PrismaModule } from '@/modules/prisma/prisma.module';
 import { HelloModule } from '@/modules/hello/hello.module';
+import { AuthModule } from '@/modules/auth/auth.module';
 import { AppService } from './app.service';
 import { validate } from '@/config/env.validation';
 
@@ -23,6 +24,7 @@ import { validate } from '@/config/env.validation';
       introspection: process.env.NODE_ENV !== 'production',
     }),
     PrismaModule,
+    AuthModule,
     HelloModule,
   ],
   providers: [AppService],

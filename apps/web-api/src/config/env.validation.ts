@@ -33,6 +33,12 @@ export class EnvironmentVariables {
   @IsString()
   @Matches(/^postgresql:\/\//)
   DATABASE_URL!: string;
+
+  @IsString()
+  AUTH0_DOMAIN!: string;
+
+  @IsUrl({ require_tld: false })
+  AUTH0_AUDIENCE!: string;
 }
 
 export function validate(

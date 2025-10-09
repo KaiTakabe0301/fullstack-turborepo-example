@@ -1,3 +1,2 @@
-/* eslint-disable */
-export * from "@/graphql/__generated__/fragment-masking";
-export * from "@/graphql/__generated__/gql";
+export * from "./fragment-masking";
+export * from "./gql";

@@ -16,17 +16,6 @@ const config: CodegenConfig = {
         },
       },
     },
-    'src/graphql/__generated__/index.ts': {
-      plugins: [
-        {
-          add: {
-            content: `/* eslint-disable */
-export * from "@/graphql/__generated__/fragment-masking";
-export * from "@/graphql/__generated__/gql";`,
-          },
-        },
-      ],
-    },
   },
 };
 

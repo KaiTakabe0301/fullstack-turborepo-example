@@ -60,7 +60,12 @@ const eslintConfig = [
   // 共通ESLint設定を適用（重複するpluginを除外して展開）
   ...excludePlugins(reactConfig, alreadyLoadedPlugins),
   {
-    ignores: ['**/generated/**', '**/dist/**', '**/node_modules/**'],
+    ignores: [
+      '**/generated/**',
+      '**/__generated__/**',
+      '**/dist/**',
+      '**/node_modules/**',
+    ],
   },
   // プロジェクト固有の設定
   {

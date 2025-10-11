@@ -80,6 +80,7 @@ const eslintConfig = [
     rules: {
       '@next/next/no-html-link-for-pages': 'error',
       '@next/next/no-img-element': 'warn',
+      'import/no-relative-parent-imports': 'off',
     },
   },
 
@@ -89,6 +90,7 @@ const eslintConfig = [
     rules: {
       'no-console': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      'import/no-relative-parent-imports': 'off',
     },
   },
 
@@ -98,6 +100,7 @@ const eslintConfig = [
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       'no-console': 'off',
+      'import/no-relative-parent-imports': 'off',
     },
   },
 

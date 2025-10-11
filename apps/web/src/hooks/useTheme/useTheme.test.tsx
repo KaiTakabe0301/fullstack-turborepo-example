@@ -1,0 +1,93 @@
+import { renderHook, act } from '@testing-library/react';
+import { type ReactNode } from 'react';
+import { describe, it, expect, beforeEach } from 'vitest';
+
+import { ThemeProvider, type Theme } from '@/contexts/ThemeContext';
+
+import { useTheme } from '.';
+
+interface WrapperProps {
+  children: ReactNode;
+  initialTheme?: Theme;
+}
+
+describe('useTheme', () => {
+  beforeEach(() => {
+    document.documentElement.removeAttribute('data-theme');
+    document.cookie = 'theme=; path=/; max-age=0';
+  });
+
+  const wrapper = ({ children, initialTheme = 'light' }: WrapperProps) => (
+    <ThemeProvider initialTheme={initialTheme}>{children}</ThemeProvider>
+  );
+
+  it('should throw error when used outside ThemeProvider', () => {
+    expect(() => renderHook(() => useTheme())).toThrow('useTheme must be used within a ThemeProvider');
+  });
+
+  it('should initialize with light theme', () => {
+    const { result } = renderHook(() => useTheme(), { wrapper });
+
+    expect(result.current.theme).toBe('light');
+  });
+
+  it('should initialize with dark theme when provided', () => {
+    const { result } = renderHook(() => useTheme(), {
+      wrapper: ({ children }) => wrapper({ children, initialTheme: 'dark' }),
+    });
+
+    expect(result.current.theme).toBe('dark');
+  });
+
+  it('should update theme and save to cookie when setTheme is called', () => {
+    const { result } = renderHook(() => useTheme(), { wrapper });
+
+    act(() => {
+      result.current.setTheme('dark');
+    });
+
+    expect(result.current.theme).toBe('dark');
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(document.cookie).toContain('theme=dark');
+  });
+
+  it('should toggle theme correctly', () => {
+    const { result } = renderHook(() => useTheme(), { wrapper });
+
+    expect(result.current.theme).toBe('light');
+
+    act(() => {
+      result.current.toggleTheme();
+    });
+
+    expect(result.current.theme).toBe('dark');
+    expect(document.cookie).toContain('theme=dark');
+
+    act(() => {
+      result.current.toggleTheme();
+    });
+
+    expect(result.current.theme).toBe('light');
+    expect(document.cookie).toContain('theme=light');
+  });
+
+  it('should memoize setTheme callback', () => {
+    const { result, rerender } = renderHook(() => useTheme(), { wrapper });
+
+    const setTheme1 = result.current.setTheme;
+    rerender();
+    const setTheme2 = result.current.setTheme;
+
+    expect(setTheme1).toBe(setTheme2);
+  });
+
+  it('should memoize toggleTheme callback', () => {
+    const { result, rerender } = renderHook(() => useTheme(), { wrapper });
+
+    const toggleTheme1 = result.current.toggleTheme;
+    rerender();
+    const toggleTheme2 = result.current.toggleTheme;
+
+    expect(toggleTheme1).toBe(toggleTheme2);
+  });
+});

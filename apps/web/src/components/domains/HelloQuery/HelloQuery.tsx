@@ -14,9 +14,7 @@ export const HelloQuery = memo(({ ref }: HelloQueryProps) => {
     <div ref={ref} className='flex flex-col lg:flex-row gap-6 w-full'>
       {/* Left Column - Query */}
       <div className='flex-1 flex flex-col gap-4'>
-        <h2 className='text-xl font-semibold text-foreground'>
-          GraphQL Query
-        </h2>
+        <h2 className='text-xl font-semibold text-foreground'>GraphQL Query</h2>
         <pre className='bg-black/[.03] dark:bg-white/[.06] border border-black/[.1] dark:border-white/[.145] rounded-lg p-4 text-sm font-mono text-foreground overflow-x-auto'>
           {queryString}
         </pre>

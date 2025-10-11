@@ -1,2 +1,2 @@
-export { HelloQuery } from './HelloQuery';
-export type { HelloQueryProps } from './HelloQuery';
+export { HelloQuery } from '@/components/domains/HelloQuery/HelloQuery';
+export type { HelloQueryProps } from '@/components/domains/HelloQuery/HelloQuery';

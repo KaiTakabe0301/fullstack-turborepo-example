@@ -22,7 +22,9 @@ describe('useTheme', () => {
   );
 
   it('should throw error when used outside ThemeProvider', () => {
-    expect(() => renderHook(() => useTheme())).toThrow('useTheme must be used within a ThemeProvider');
+    expect(() => renderHook(() => useTheme())).toThrow(
+      'useTheme must be used within a ThemeProvider'
+    );
   });
 
   it('should initialize with light theme', () => {

@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { useTheme, type Theme } from '@/hooks/useTheme';
 
 interface UseThemeToggleReturn {
-  theme: Theme;
+  theme: Theme | null;
   handleToggle: () => void;
   ariaLabel: string;
 }

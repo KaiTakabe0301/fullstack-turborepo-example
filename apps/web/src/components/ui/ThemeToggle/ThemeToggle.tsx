@@ -1,3 +1,4 @@
+'use client';
 import { memo } from 'react';
 
 import { ThemeToggleUI } from '@/components/ui/ThemeToggle/ThemeToggleUI';
@@ -9,6 +10,10 @@ interface ThemeToggleProps {
 
 export const ThemeToggle = memo(({ ref }: ThemeToggleProps) => {
   const themeToggle = useThemeToggle();
+
+  if (!themeToggle.theme) {
+    return null;
+  }
 
   return (
     <ThemeToggleUI

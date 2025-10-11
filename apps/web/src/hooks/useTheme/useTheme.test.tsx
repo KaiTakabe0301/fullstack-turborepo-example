@@ -14,12 +14,14 @@ interface WrapperProps {
 describe('useTheme', () => {
   beforeEach(() => {
     document.documentElement.removeAttribute('data-theme');
-    document.cookie = 'theme=; path=/; max-age=0';
+    localStorage.clear();
   });
 
-  const wrapper = ({ children, initialTheme = 'light' }: WrapperProps) => (
-    <ThemeProvider initialTheme={initialTheme}>{children}</ThemeProvider>
-  );
+  const wrapper = ({ children, initialTheme = 'light' }: WrapperProps) => {
+    // Set initial theme in data-theme attribute to simulate ThemeScript behavior
+    document.documentElement.setAttribute('data-theme', initialTheme);
+    return <ThemeProvider>{children}</ThemeProvider>;
+  };
 
   it('should throw error when used outside ThemeProvider', () => {
     expect(() => renderHook(() => useTheme())).toThrow(
@@ -41,7 +43,7 @@ describe('useTheme', () => {
     expect(result.current.theme).toBe('dark');
   });
 
-  it('should update theme and save to cookie when setTheme is called', () => {
+  it('should update theme and save to localStorage when setTheme is called', () => {
     const { result } = renderHook(() => useTheme(), { wrapper });
 
     act(() => {
@@ -50,7 +52,7 @@ describe('useTheme', () => {
 
     expect(result.current.theme).toBe('dark');
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
-    expect(document.cookie).toContain('theme=dark');
+    expect(localStorage.getItem('theme')).toBe('dark');
   });
 
   it('should toggle theme correctly', () => {
@@ -63,14 +65,14 @@ describe('useTheme', () => {
     });
 
     expect(result.current.theme).toBe('dark');
-    expect(document.cookie).toContain('theme=dark');
+    expect(localStorage.getItem('theme')).toBe('dark');
 
     act(() => {
       result.current.toggleTheme();
     });
 
     expect(result.current.theme).toBe('light');
-    expect(document.cookie).toContain('theme=light');
+    expect(localStorage.getItem('theme')).toBe('light');
   });
 
   it('should memoize setTheme callback', () => {

@@ -1,3 +1,5 @@
+'use client';
+
 import { memo } from 'react';
 
 import { useHelloQuery } from '@/components/domains/HelloQuery/useHelloQuery';

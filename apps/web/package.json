@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@apollo/client": "4.0.7",
+    "@apollo/client-integration-nextjs": "^0.13.2",
     "@storybook/addon-themes": "^9.1.10",
     "@storybook/theming": "^8.6.14",
     "graphql": "^16.10.0",

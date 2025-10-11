@@ -65,6 +65,7 @@ const eslintConfig = [
       '**/__generated__/**',
       '**/dist/**',
       '**/node_modules/**',
+      '.storybook/**',
     ],
   },
   // プロジェクト固有の設定

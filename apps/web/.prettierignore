@@ -8,3 +8,5 @@ dist
 package-lock.json
 yarn.lock
 .storybook/public
+storybook-static
+**/__generated__/

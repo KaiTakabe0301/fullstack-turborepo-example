@@ -1,4 +1,4 @@
-import type { Preview } from '@storybook/react';
+import type { Preview } from '@storybook/nextjs-vite';
 import '../src/styles/globals.css';
 import { withThemeByDataAttribute } from '@storybook/addon-themes';
 import { DocsContainer } from '@storybook/addon-docs/blocks';

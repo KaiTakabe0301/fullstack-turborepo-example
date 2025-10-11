@@ -1,5 +1,5 @@
 import '@/styles/globals.css';
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
 import { parse } from 'cookie';
 import App, {
   type AppProps,

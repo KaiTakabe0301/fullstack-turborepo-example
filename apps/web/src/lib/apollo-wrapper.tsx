@@ -1,6 +1,7 @@
 'use client';
 
-import { HttpLink } from '@apollo/client';
+import { ApolloLink, HttpLink } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import {
   ApolloNextAppProvider,
   ApolloClient,
@@ -24,9 +25,38 @@ export const ApolloWrapper = memo(({ children }: ApolloWrapperProps) => {
         },
       });
 
+      const authLink = setContext(async (_, { headers }) => {
+        const existingHeaders = (headers as Record<string, string>) ?? {};
+        try {
+          const response = await fetch('/api/token');
+          if (response.ok) {
+            const data = (await response.json()) as {
+              accessToken: {
+                token: string;
+                expiresAt: number;
+                scope?: string;
+              };
+            };
+            const token = data.accessToken.token;
+
+            return {
+              headers: {
+                ...existingHeaders,
+                ...(token ? { authorization: `Bearer ${token}` } : {}),
+              },
+            };
+          }
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Failed to get access token:', error);
+        }
+
+        return { headers: existingHeaders };
+      });
+
       return new ApolloClient({
         cache: new InMemoryCache(),
-        link: httpLink,
+        link: ApolloLink.from([authLink, httpLink]),
       });
     },
     []

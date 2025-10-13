@@ -2,14 +2,14 @@
   "$schema": "https://turborepo.com/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": ["^build", "@fste/web#codegen"],
+      "dependsOn": ["^build", "@repo/web#codegen"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
     },
     "dev": {
-      "dependsOn": ["@fste/web#codegen"],
+      "dependsOn": ["@repo/web#codegen"],
       "persistent": true,
       "cache": false
     },
@@ -35,7 +35,7 @@
       "cache": false,
       "persistent": true
     },
-    "@fste/web#codegen": {
+    "@repo/web#codegen": {
       "dependsOn": ["@repo/web-api#generate:schema"],
       "cache": false
     },

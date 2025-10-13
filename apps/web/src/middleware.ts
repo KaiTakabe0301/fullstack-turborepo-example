@@ -1,8 +1,13 @@
-import { type NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 
 import { auth0 } from '@/lib/auth0';
 
 export async function middleware(request: NextRequest) {
+  // Server Action の POST は素通し（セッション更新を避ける）
+  if (request.method === 'POST' && request.headers.has('Next-Action')) {
+    return NextResponse.next();
+  }
+
   return await auth0.middleware(request);
 }
 

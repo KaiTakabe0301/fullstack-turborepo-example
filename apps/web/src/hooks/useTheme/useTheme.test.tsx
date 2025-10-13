@@ -3,8 +3,7 @@ import { type ReactNode } from 'react';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { ThemeProvider, type Theme } from '@/contexts/ThemeContext';
-
-import { useTheme } from '.';
+import { useTheme } from '@/hooks/useTheme/useTheme';
 
 interface WrapperProps {
   children: ReactNode;

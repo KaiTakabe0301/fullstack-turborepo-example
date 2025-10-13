@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { useThemeToggle } from '@/components/ui/ThemeToggle/useThemeToggle';
-import { useTheme } from '@/hooks/useTheme';
+import { useTheme } from '@/hooks/useTheme/useTheme';
 
 vi.mock('@/hooks/useTheme');
 

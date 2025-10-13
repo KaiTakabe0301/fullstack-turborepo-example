@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import { useTheme, type Theme } from '@/hooks/useTheme';
+import { useTheme, type Theme } from '@/hooks/useTheme/useTheme';
 
 interface UseThemeToggleReturn {
   theme: Theme | null;

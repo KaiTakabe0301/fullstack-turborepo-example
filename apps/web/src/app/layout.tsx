@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import '@/styles/globals.css';
 
 import { Providers } from '@/app/providers';
-import { ThemeScript } from '@/components/ThemeScript';
+import { ThemeScript } from '@/components/ThemeScript/ThemeScript';
 
 export const metadata: Metadata = {
   title: 'Fullstack Turborepo Boilerplate',

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { TechStackCard } from '@/components/ui/TechStackCard';
+import { TechStackCard } from '@/components/ui/TechStackCard/TechStackCard';
 
 const meta = {
   title: 'UI/TechStackCard',

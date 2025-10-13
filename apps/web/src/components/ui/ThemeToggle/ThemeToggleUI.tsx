@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import type { Theme } from '@/contexts';
+import type { Theme } from '@/contexts/ThemeContext';
 
 interface ThemeToggleUIProps {
   ref?: React.Ref<HTMLButtonElement>;

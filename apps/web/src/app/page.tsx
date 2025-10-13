@@ -1,6 +1,6 @@
-import { HelloQuery } from '@/components/domains/HelloQuery';
-import { TechStackCard } from '@/components/ui/TechStackCard';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { HelloQuery } from '@/components/domains/HelloQuery/HelloQuery';
+import { TechStackCard } from '@/components/ui/TechStackCard/TechStackCard';
+import { ThemeToggle } from '@/components/ui/ThemeToggle/ThemeToggle';
 
 const techStacks = [
   {

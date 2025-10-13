@@ -9,18 +9,7 @@ import {
 } from '@apollo/client-integration-nextjs';
 
 import { auth0 } from '@/lib/auth0';
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
-}
-
-function isStringRecord(value: unknown): value is Record<string, string> {
-  if (!isRecord(value)) {
-    return false;
-  }
-
-  return Object.values(value).every(v => typeof v === 'string');
-}
+import { isStringRecord } from '@/utils/typeGuards';
 
 export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
   const httpLink = new HttpLink({

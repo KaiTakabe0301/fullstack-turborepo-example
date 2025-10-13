@@ -1,4 +1,4 @@
-import { HelloQueryExecutor } from '@/components/domains/HelloQuery/HelloQueryExecutor';
+import { ExecuteQueryButton } from '@/components/domains/HelloQuery/ExecuteQueryButton';
 import { auth0 } from '@/lib/auth0';
 
 export async function HelloQuery() {
@@ -39,7 +39,7 @@ export async function HelloQuery() {
       </div>
 
       {/* Query Executor */}
-      <HelloQueryExecutor isAuthenticated={isAuthenticated} />
+      <ExecuteQueryButton isAuthenticated={isAuthenticated} />
     </div>
   );
 }

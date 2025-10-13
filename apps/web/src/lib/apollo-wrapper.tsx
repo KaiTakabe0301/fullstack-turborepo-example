@@ -1,7 +1,7 @@
 'use client';
 
 import { ApolloLink, HttpLink } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+import { SetContextLink } from '@apollo/client/link/context';
 import {
   ApolloNextAppProvider,
   ApolloClient,
@@ -11,6 +11,51 @@ import { memo, useMemo } from 'react';
 
 interface ApolloWrapperProps {
   children: React.ReactNode;
+}
+
+interface AccessTokenResponse {
+  accessToken: {
+    token: string;
+    expiresAt: number;
+    scope?: string;
+  };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function isStringRecord(value: unknown): value is Record<string, string> {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  return Object.values(value).every(v => typeof v === 'string');
+}
+
+function isAccessTokenResponse(data: unknown): data is AccessTokenResponse {
+  if (!isRecord(data)) {
+    return false;
+  }
+
+  if (!('accessToken' in data)) {
+    return false;
+  }
+
+  const { accessToken } = data;
+
+  if (!isRecord(accessToken)) {
+    return false;
+  }
+
+  if (!('token' in accessToken) || !('expiresAt' in accessToken)) {
+    return false;
+  }
+
+  return (
+    typeof accessToken.token === 'string' &&
+    typeof accessToken.expiresAt === 'number'
+  );
 }
 
 export const ApolloWrapper = memo(({ children }: ApolloWrapperProps) => {
@@ -25,26 +70,28 @@ export const ApolloWrapper = memo(({ children }: ApolloWrapperProps) => {
         },
       });
 
-      const authLink = setContext(async (_, { headers }) => {
-        const existingHeaders = (headers as Record<string, string>) ?? {};
+      const authLink = new SetContextLink(async prevContext => {
+        const existingHeaders: Record<string, string> = isStringRecord(
+          prevContext.headers
+        )
+          ? prevContext.headers
+          : {};
+
         try {
           const response = await fetch('/api/token');
           if (response.ok) {
-            const data = (await response.json()) as {
-              accessToken: {
-                token: string;
-                expiresAt: number;
-                scope?: string;
-              };
-            };
-            const token = data.accessToken.token;
+            const data: unknown = await response.json();
 
-            return {
-              headers: {
-                ...existingHeaders,
-                ...(token ? { authorization: `Bearer ${token}` } : {}),
-              },
-            };
+            if (isAccessTokenResponse(data)) {
+              const token = data.accessToken.token;
+
+              return {
+                headers: {
+                  ...existingHeaders,
+                  ...(token ? { authorization: `Bearer ${token}` } : {}),
+                },
+              };
+            }
           }
         } catch (error) {
           // eslint-disable-next-line no-console

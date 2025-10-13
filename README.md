@@ -1,168 +1,182 @@
 # Fullstack Turborepo Example
 
-TypeScript + Monorepo + NestJS + GraphQL + Prisma + PostgreSQL のフルスタックボイラープレート
+A modern fullstack boilerplate featuring TypeScript, Monorepo, NestJS, GraphQL, Prisma, and PostgreSQL.
 
-## 構成
+## Tech Stack
 
-### アプリケーション
+### Monorepo & Build Tools
 
-- **apps/web** - Next.js フロントエンド
-- **apps/web-api** - NestJS GraphQL バックエンド
+- **Turborepo** 2.5.3 - High-performance build system for JavaScript/TypeScript monorepos
+- **pnpm** 9.15.1 - Fast, disk space efficient package manager
 
-### パッケージ
+### Frontend (apps/web)
 
-- **packages/database** - 共有Prismaクライアント
-- **packages/eslint-config** - 共有ESLint設定
-- **packages/prettier-config** - 共有Prettier設定
+- **Next.js** 15.3.2 - React framework with App Router
+- **React** 19.1.0 - UI library
+- **TypeScript** 5.8.3 - Type-safe JavaScript
+- **Apollo Client** 4.0.7 - GraphQL client with caching
+- **GraphQL Code Generator** 5.0.3 - Type-safe GraphQL operations
+- **Tailwind CSS** 3.4.17 - Utility-first CSS framework
+- **Storybook** 9.1.10 - UI component development environment
+- **Vitest** 3.1.4 - Fast unit test framework
+- **React Testing Library** 16.3.0 - React component testing utilities
+- **MSW** 2.8.4 - API mocking for testing
 
-## セットアップ
+### Backend (apps/web-api)
 
-### 1. 依存関係のインストール
+- **NestJS** 10.4.9 - Progressive Node.js framework
+- **Apollo Server** 4.11.2 - GraphQL server
+- **GraphQL** 16.10.0 - Query language for APIs
+- **TypeScript** 5.7.3 - Type-safe JavaScript
+- **Prisma** 5.22.0 - Next-generation ORM
+- **Jest** 29.7.0 - JavaScript testing framework
+
+### Database
+
+- **PostgreSQL** 16-alpine - Powerful, open source relational database
+- **Prisma** 5.22.0 - Database toolkit and ORM
+
+### Development Tools
+
+- **ESLint** - JavaScript/TypeScript linter with custom shared configs
+- **Prettier** - Code formatter with shared configuration
+- **Docker Compose** - Multi-container Docker orchestration
+
+## Project Structure
+
+```
+.
+├── apps/
+│   ├── web/                    # Next.js frontend application
+│   │   ├── src/
+│   │   │   ├── components/     # React components
+│   │   │   │   ├── ui/        # Reusable UI components
+│   │   │   │   └── domains/   # Domain-specific components
+│   │   │   ├── hooks/         # Custom React hooks
+│   │   │   ├── pages/         # Next.js pages
+│   │   │   ├── contexts/      # React contexts
+│   │   │   ├── lib/           # Apollo Client setup
+│   │   │   ├── mocks/         # MSW mock handlers
+│   │   │   └── styles/        # Global styles
+│   │   └── .storybook/        # Storybook configuration
+│   └── web-api/               # NestJS GraphQL API
+│       └── src/
+│           ├── modules/       # Feature modules
+│           │   ├── app/      # Main application module
+│           │   ├── hello/    # Sample GraphQL module
+│           │   └── prisma/   # Prisma service module
+│           ├── config/        # Environment validation
+│           └── generated/     # Generated GraphQL schema
+├── packages/
+│   ├── database/              # Shared Prisma client
+│   │   └── prisma/           # Prisma schema
+│   ├── eslint-config/         # Shared ESLint configuration
+│   │   └── src/
+│   │       ├── base.js       # Base TypeScript config
+│   │       └── react.js      # React-specific config
+│   └── prettier-config/       # Shared Prettier configuration
+├── docker-compose.yml         # PostgreSQL setup
+├── turbo.json                 # Turborepo configuration
+└── pnpm-workspace.yaml        # pnpm workspace configuration
+```
+
+## Applications
+
+### apps/web
+
+Next.js frontend application featuring:
+
+- Apollo Client for GraphQL queries with type-safe generated hooks
+- Storybook for component development and documentation
+- Comprehensive testing setup with Vitest and React Testing Library
+- MSW for API mocking during development and testing
+- Tailwind CSS for styling
+- Theme switching (light/dark mode) with cookie persistence
+
+### apps/web-api
+
+NestJS GraphQL API featuring:
+
+- Apollo Server for GraphQL endpoint
+- Prisma ORM for database access
+- Auto-generated GraphQL schema
+- Environment variable validation
+- Modular architecture with NestJS modules
+
+## Packages
+
+### packages/database
+
+- Shared Prisma client configuration
+- Database schema definitions
+- Migration management
+- Provides type-safe database access to all applications
+
+### packages/eslint-config
+
+- Shared ESLint configuration for TypeScript projects
+- React-specific rules for frontend applications
+- Enforces code quality and consistency across the monorepo
+
+### packages/prettier-config
+
+- Shared Prettier configuration
+- Ensures consistent code formatting across all packages
+
+## Setup
+
+### 1. Install Dependencies
 
 ```bash
 pnpm install
 ```
 
-### 2. 環境変数の設定
+### 2. Set Up Environment Variables
 
 ```bash
-cp .env.example .env
+# Copy environment files for all applications
+cp packages/database/.env.example packages/database/.env
+cp apps/web/.env.local.example apps/web/.env.local
+cp apps/web-api/.env.example apps/web-api/.env
 ```
 
-### 3. PostgreSQLの起動
+**Database Configuration** (`packages/database/.env`):
+
+```
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/mydb?schema=public"
+```
+
+**Frontend Configuration** (`apps/web/.env.local`):
+
+- `NEXT_PUBLIC_GRAPHQL_URL` - GraphQL API endpoint (default: http://localhost:3001/graphql)
+
+**Backend Configuration** (`apps/web-api/.env`):
+
+- `NODE_ENV` - Environment mode (default: development)
+- `PORT` - API server port (default: 3001)
+- `CORS_ORIGIN` - Allowed CORS origin (default: http://localhost:3000)
+- `DATABASE_URL` - PostgreSQL connection string (same as packages/database)
+
+### 3. Start PostgreSQL
 
 ```bash
-pnpm docker:up
+docker-compose up -d
 ```
 
-### 4. データベースのセットアップ
-
-```bash
-# Prismaクライアントの生成
-pnpm db:generate
-
-# データベーススキーマの適用
-pnpm db:push
-```
-
-### 5. 開発サーバーの起動
+### 4. Start Development Servers
 
 ```bash
 pnpm dev
 ```
 
-## アクセス情報
+This command will:
 
-- **フロントエンド**: http://localhost:3000
+1. Run database migrations
+2. Start all development servers in parallel (frontend + backend)
+
+## Access Information
+
+- **Frontend**: http://localhost:3000
 - **GraphQL Playground**: http://localhost:3001/graphql
-- **Prisma Studio**: `pnpm db:studio`
-
-## 利用可能なコマンド
-
-```bash
-# 開発
-pnpm dev                # 全サービスの開発サーバーを起動
-pnpm build              # プロダクションビルド
-pnpm lint               # ESLintの実行
-pnpm test               # テストの実行
-
-# データベース
-pnpm db:generate        # Prismaクライアントの生成
-pnpm db:push           # スキーマの適用（開発環境）
-pnpm db:migrate        # マイグレーションの実行
-pnpm db:studio         # Prisma Studioの起動
-
-# Docker
-pnpm docker:up         # PostgreSQLコンテナの起動
-pnpm docker:down       # PostgreSQLコンテナの停止
-pnpm docker:logs       # コンテナログの表示
-```
-
-## サンプルGraphQLクエリ
-
-```graphql
-# 全ユーザーの取得
-query GetUsers {
-  users {
-    id
-    email
-    name
-    role
-    createdAt
-    updatedAt
-  }
-}
-
-# ユーザーの作成
-mutation CreateUser {
-  createUser(createUserInput: {
-    email: "user@example.com"
-    name: "Test User"
-    password: "password123"
-    role: USER
-  }) {
-    id
-    email
-    name
-    role
-  }
-}
-
-# ユーザーの更新
-mutation UpdateUser {
-  updateUser(
-    id: "user-id-here"
-    updateUserInput: {
-      name: "Updated Name"
-    }
-  ) {
-    id
-    name
-  }
-}
-
-# ユーザーの削除
-mutation RemoveUser {
-  removeUser(id: "user-id-here") {
-    id
-  }
-}
-```
-
-## プロジェクト構造
-
-```
-.
-├── apps/
-│   ├── web/                    # Next.js フロントエンド
-│   └── web-api/                # NestJS GraphQL API
-├── packages/
-│   ├── database/               # Prismaクライアント
-│   ├── eslint-config/          # ESLint共有設定
-│   └── prettier-config/        # Prettier共有設定
-├── docker-compose.yml          # PostgreSQL設定
-├── turbo.json                  # Turborepo設定
-└── pnpm-workspace.yaml         # pnpmワークスペース設定
-```
-
-## 技術スタック
-
-- **Monorepo**: Turborepo + pnpm
-- **Frontend**: Next.js, React, TypeScript
-- **Backend**: NestJS, GraphQL (Apollo Server), TypeScript
-- **Database**: PostgreSQL, Prisma ORM
-- **開発ツール**: ESLint, Prettier, Vitest, Storybook
-- **インフラ**: Docker Compose
-
-## 拡張性
-
-このボイラープレートは、新しいアプリケーションやサービスを追加しやすい構造になっています：
-
-```bash
-# 新しいWebアプリの追加例
-apps/admin/           # 管理画面フロントエンド
-apps/admin-api/       # 管理画面用API
-
-# 新しいサービスの追加例
-apps/mobile-api/      # モバイルアプリ用API
-```
+- **Storybook**: http://localhost:6006 (run `pnpm --filter @repo/web storybook`)
+- **Prisma Studio**: Run `pnpm --filter @repo/database db:studio`

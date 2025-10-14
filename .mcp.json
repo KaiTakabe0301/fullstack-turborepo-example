@@ -1,0 +1,51 @@
+{
+  "mcpServers": {
+    "eslint": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "eslint",
+        "--mcp"
+      ],
+      "env": {}
+    },
+    "o3": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "o3-search-mcp"
+      ],
+      "env": {
+        "OPENAI_API_KEY": "op://dlyln4vmwr2j4p5q4j4b7rhaha/OPENAI_API_KEY/credential",
+        "SEARCH_CONTEXT_SIZE": "medium",
+        "REASONING_EFFORT": "medium"
+      }
+    },
+    "repomix": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "repomix",
+        "--mcp"
+      ],
+      "env": {}
+    },
+    "serena": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--context",
+        "ide-assistant",
+        "--project",
+        "/Users/kai/Projects/react_project/fullstack-turborepo-example"
+      ],
+      "env": {}
+    }
+  }
+}

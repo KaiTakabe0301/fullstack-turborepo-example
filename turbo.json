@@ -36,7 +36,11 @@
       "persistent": true
     },
     "@repo/web#codegen": {
-      "dependsOn": ["@repo/web-api#generate:schema"],
+      "dependsOn": ["@repo/web-api#generate:all"],
+      "cache": false
+    },
+    "generate:all": {
+      "dependsOn": ["@repo/database#db:generate"],
       "cache": false
     },
     "generate:schema": {

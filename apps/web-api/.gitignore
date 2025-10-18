@@ -38,3 +38,9 @@ lerna-debug.log*
 .env
 .env.local
 .env.*.local
+
+# TypeSpec output
+/tsp-output
+
+# OpenAPI Generator output
+/src/generated

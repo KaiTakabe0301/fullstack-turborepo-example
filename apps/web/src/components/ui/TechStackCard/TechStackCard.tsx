@@ -19,7 +19,9 @@ export function TechStackCard({
       <div className='flex justify-between items-start mb-2'>
         <h3 className='text-lg font-semibold text-foreground'>{name}</h3>
         {version && (
-          <span className='text-sm text-foreground/60 font-mono'>{version}</span>
+          <span className='text-sm text-foreground/60 font-mono'>
+            {version}
+          </span>
         )}
       </div>
       <p className='text-sm text-foreground/80'>{description}</p>

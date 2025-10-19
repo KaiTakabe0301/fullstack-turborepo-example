@@ -14,7 +14,7 @@ export async function HelloQuery() {
         {!isAuthenticated ? (
           <div className='flex flex-col gap-3'>
             <p className='text-sm text-foreground/80'>
-              You need to log in to execute GraphQL queries
+              You need to log in to execute REST API requests
             </p>
             <a
               href='/auth/login'

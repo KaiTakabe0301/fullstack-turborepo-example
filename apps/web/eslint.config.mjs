@@ -63,6 +63,7 @@ const eslintConfig = [
     ignores: [
       '**/generated/**',
       '**/__generated__/**',
+      '**/gen/**', // Orval generated files
       '**/dist/**',
       '**/node_modules/**',
       '.storybook/**',

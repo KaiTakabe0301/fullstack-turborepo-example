@@ -1,10 +1,9 @@
-import { http, HttpResponse } from 'msw';
+// REST API handlers (Orval generated)
+import { getHelloGetHelloMockHandler } from '@/lib/api/gen/endpoints/hello/hello.msw';
 
 export const handlers = [
-  // Example handler - replace with your actual API endpoints
-  http.get('/api/hello', () => {
-    return HttpResponse.json({
-      message: 'Hello from MSW!',
-    });
-  }),
+  // REST API handlers (Orval generated)
+  getHelloGetHelloMockHandler(),
+
+  // GraphQL handlers will be added here in the future if needed
 ];

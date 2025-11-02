@@ -14,9 +14,7 @@ interface UseHelloQueryReturn {
   formattedResponse: string;
 }
 
-function isErrorResponseData(
-  data: unknown
-): data is { error?: string } {
+function isErrorResponseData(data: unknown): data is { error?: string } {
   if (typeof data !== 'object' || data === null) {
     return false;
   }
@@ -37,11 +35,11 @@ export const useHelloQuery = (): UseHelloQueryReturn => {
   const formattedResponse = useMemo(() => {
     if (isLoading) return 'Loading...';
     if (error) {
-      const statusCode = error.status ?? 'unknown';
+      const statusCode = error.statusCode ?? 'unknown';
       let errorMessage = 'Request failed';
 
-      if (isErrorResponseData(error.data)) {
-        errorMessage = error.data.error ?? 'Request failed';
+      if (isErrorResponseData(error.message)) {
+        errorMessage = error.message ?? 'Request failed';
       }
 
       return `Error (${statusCode}): ${errorMessage}`;

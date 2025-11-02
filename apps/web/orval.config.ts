@@ -19,7 +19,7 @@ export default defineConfig({
       override: {
         mutator: {
           path: '../fetcher.ts',
-          name: 'customFetch',
+          name: 'safeFetch',
         },
         query: {
           useQuery: true,

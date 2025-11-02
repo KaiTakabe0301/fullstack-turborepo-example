@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { memo, useMemo } from 'react';
 
-import { isHttpFetchError } from '@/lib/api/fetcher';
+import { isHttpFetchError } from '@/lib/error';
 
 interface QueryProviderProps {
   children: React.ReactNode;

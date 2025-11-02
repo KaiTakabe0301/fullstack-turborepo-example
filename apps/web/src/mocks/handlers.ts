@@ -1,5 +1,5 @@
 // REST API handlers (Orval generated)
-import { getHelloGetHelloMockHandler } from '@/lib/api/gen/endpoints/hello/hello.msw';
+import { getHelloGetHelloMockHandler } from '@/lib/api/gen/endpoints/client/hello/hello.msw';
 
 export const handlers = [
   // REST API handlers (Orval generated)

@@ -1,8 +1,9 @@
 import { type ZodType, treeifyError } from 'zod';
 
 import {
-  FetchError,
   HTTPFetchError,
+  isAbortError,
+  isFetchError,
   NetworkFetchError,
   ParseFetchError,
   TimeoutFetchError,
@@ -48,7 +49,8 @@ export async function safeFetch<T>(
   const timeoutId = setTimeout(() => ac.abort(), timeoutMs);
 
   try {
-    const response = await fetch(url, {
+    const apiUrl = process.env.API_URL ?? 'http://localhost:3001';
+    const response = await fetch(`${apiUrl}${url}`, {
       ...init,
       cache,
       method,
@@ -150,19 +152,3 @@ export async function safeFetch<T>(
     clearTimeout(timeoutId);
   }
 }
-
-const isAbortError = (error: unknown): boolean => {
-  return (
-    error instanceof Error &&
-    (error.name === 'AbortError' ||
-      (error.cause instanceof Error && error.cause.name === 'AbortError'))
-  );
-};
-
-export const isFetchError = (error: unknown): error is FetchError => {
-  return error instanceof FetchError;
-};
-
-export const isHttpFetchError = (error: unknown): error is HTTPFetchError => {
-  return error instanceof HTTPFetchError;
-};

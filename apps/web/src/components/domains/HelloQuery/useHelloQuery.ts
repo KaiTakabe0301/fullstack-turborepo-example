@@ -4,7 +4,7 @@ import {
   useHelloGetHello,
   type HelloGetHelloQueryError,
   type HelloGetHelloQueryResult,
-} from '@/lib/api/gen';
+} from '@/lib/api/gen/endpoints/client/hello/hello';
 
 interface UseHelloQueryReturn {
   data: HelloGetHelloQueryResult | undefined;

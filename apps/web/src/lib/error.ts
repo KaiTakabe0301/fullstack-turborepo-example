@@ -71,3 +71,19 @@ export class UnknownFetchError extends FetchError {
     this.name = 'UnknownFetchError';
   }
 }
+
+export const isAbortError = (error: unknown): boolean => {
+  return (
+    error instanceof Error &&
+    (error.name === 'AbortError' ||
+      (error.cause instanceof Error && error.cause.name === 'AbortError'))
+  );
+};
+
+export const isFetchError = (error: unknown): error is FetchError => {
+  return error instanceof FetchError;
+};
+
+export const isHttpFetchError = (error: unknown): error is HTTPFetchError => {
+  return error instanceof HTTPFetchError;
+};

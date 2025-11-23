@@ -1,10 +1,36 @@
 import { serve } from '@hono/node-server';
 
-import { env } from '@/infrastructure/config/env';
+import { EnvValidationError, getEnv } from '@/infrastructure/config/env';
+import { createLogger } from '@/infrastructure/logging/Logger';
 import { disconnectPrisma } from '@/infrastructure/persistence/prisma/PrismaClient';
 import app from '@/interfaces/http/server/app';
 
+const logger = createLogger('app-bootstrap');
+
+// アプリ起動前に環境変数をバリデーション
+let env;
+try {
+  env = getEnv();
+} catch (error) {
+  if (error instanceof EnvValidationError) {
+
+    process.exit(1);
+  }
+
+  // 予期しないエラー
+  logger.error('Failed to start application: Unexpected error', {
+    error: error instanceof Error ? error.message : String(error),
+  });
+  console.error('❌ Unexpected error during startup:', error);
+  process.exit(1);
+}
+
 const port = env.PORT;
+
+logger.info('Starting application server', {
+  port,
+  nodeEnv: env.NODE_ENV,
+});
 
 console.log(`🚀 Server is running on http://localhost:${port}`);
 
@@ -19,17 +45,39 @@ const server = serve({
 });
 
 const shutdown = async () => {
+  logger.info('Shutdown signal received, starting graceful shutdown...');
   console.log('\n🛑 Shutting down gracefully...');
 
   server.close(() => {
+    logger.info('HTTP server closed');
     console.log('✅ HTTP server closed');
   });
 
   await disconnectPrisma();
+  logger.info('Database connection closed');
   console.log('✅ Database connection closed');
 
+  logger.info('Application shutdown complete');
   process.exit(0);
 };
 
 process.on('SIGTERM', () => void shutdown());
 process.on('SIGINT', () => void shutdown());
+
+// グローバルエラーハンドラー（予期しないエラー用）
+process.on('uncaughtException', (error) => {
+  logger.error('Uncaught exception', {
+    error: error.message,
+    stack: error.stack,
+  });
+  console.error('❌ Uncaught exception:', error);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason) => {
+  logger.error('Unhandled promise rejection', {
+    reason: String(reason),
+  });
+  console.error('❌ Unhandled rejection:', reason);
+  process.exit(1);
+});

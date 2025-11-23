@@ -7,7 +7,7 @@ export default defineConfig({
   // ---------------------------
   clientHooks: {
     input: {
-      target: '../web-api/tsp-output/@typespec/openapi3/openapi.json',
+      target: '../web-api/openapi.json',
     },
     output: {
       workspace: 'src/lib/api/gen',
@@ -47,7 +47,7 @@ export default defineConfig({
   // ---------------------------
   serverSdk: {
     input: {
-      target: '../web-api/tsp-output/@typespec/openapi3/openapi.json',
+      target: '../web-api/openapi.json',
     },
     output: {
       workspace: 'src/lib/api/gen',

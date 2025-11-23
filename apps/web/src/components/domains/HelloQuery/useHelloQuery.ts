@@ -1,15 +1,15 @@
 import { useCallback, useMemo } from 'react';
 
 import {
-  useHelloGetHello,
-  type HelloGetHelloQueryError,
-  type HelloGetHelloQueryResult,
+  useGetHello,
+  type GetHelloQueryError,
+  type GetHelloQueryResult,
 } from '@/lib/api/gen/endpoints/client/hello/hello';
 
 interface UseHelloQueryReturn {
-  data: HelloGetHelloQueryResult | undefined;
+  data: GetHelloQueryResult | undefined;
   isLoading: boolean;
-  error: HelloGetHelloQueryError | null;
+  error: GetHelloQueryError | null;
   executeQuery: () => Promise<void>;
   formattedResponse: string;
 }
@@ -22,7 +22,7 @@ function isErrorResponseData(data: unknown): data is { error?: string } {
 }
 
 export const useHelloQuery = (): UseHelloQueryReturn => {
-  const { data, isLoading, error, refetch } = useHelloGetHello({
+  const { data, isLoading, error, refetch } = useGetHello({
     query: {
       enabled: false, // Manual execution only
     },
@@ -35,7 +35,7 @@ export const useHelloQuery = (): UseHelloQueryReturn => {
   const formattedResponse = useMemo(() => {
     if (isLoading) return 'Loading...';
     if (error) {
-      const statusCode = error.statusCode ?? 'unknown';
+      const statusCode = error.error ?? 'unknown';
       let errorMessage = 'Request failed';
 
       if (isErrorResponseData(error.message)) {

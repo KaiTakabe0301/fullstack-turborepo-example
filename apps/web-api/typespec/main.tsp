@@ -15,6 +15,7 @@ namespace WebApi;
  * Hello API response
  */
 model HelloResponse {
+  @minLength(1)
   message: string;
 }
 
@@ -24,6 +25,7 @@ model HelloResponse {
 @error
 model ErrorResponse {
   statusCode: int32;
+  @minLength(1)
   message: string;
   error?: string;
 }
@@ -31,16 +33,18 @@ model ErrorResponse {
 /**
  * Hello endpoint operations
  */
-@route("/api")
+@route("/v1")
 namespace Hello {
   /**
    * Get hello message
+   * Requires JWT Bearer authentication
    * @returns Hello message
    */
   @get
   @route("/hello")
   @tag("Hello")
   @summary("Get hello message")
+  @useAuth(BearerAuth)
   op getHello(): {
     @statusCode statusCode: 200;
     @body body: HelloResponse;
@@ -49,3 +53,5 @@ namespace Hello {
     @body body: ErrorResponse;
   };
 }
+
+alias BearerAuth = ApiKeyAuth<ApiKeyLocation.header, "Authorization">;

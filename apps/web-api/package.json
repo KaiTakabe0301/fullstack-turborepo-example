@@ -16,8 +16,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "generate:schema": "tsp compile typespec",
-    "generate:api-stubs": "docker run --rm -v \"$(pwd):/local\" openapitools/openapi-generator-cli generate -g typescript-nestjs -i /local/tsp-output/@typespec/openapi3/openapi.json -o /local/src/generated/api",
-    "generate:all": "pnpm generate:schema && pnpm generate:api-stubs"
+    "generate:rest-api": "docker run --rm -v \"$(pwd)/tsp-output/@typespec/openapi3:/input\" -v \"$(pwd)/src/generated:/output\" openapitools/openapi-generator-cli:latest generate -i /input/openapi.json -g typescript-nestjs-server -o /output --skip-validate-spec",
+    "generate:all": "pnpm generate:schema && pnpm generate:rest-api"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.1",
@@ -82,6 +82,9 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1"
+    }
   }
 }

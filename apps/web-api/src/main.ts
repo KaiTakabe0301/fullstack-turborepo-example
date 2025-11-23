@@ -1,7 +1,8 @@
-import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { AppModule } from './modules/app/app.module';
+
+import { AppModule } from '@/modules/app/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,7 +15,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: process.env.CORS_ORIGIN ?? 'http://localhost:3000',
     credentials: true,
   });
 
@@ -32,11 +33,14 @@ async function bootstrap() {
     SwaggerModule.setup('api-docs', app, document);
   }
 
-  await app.listen(process.env.PORT || 3001);
+  await app.listen(process.env.PORT ?? 3001);
+  // eslint-disable-next-line no-console
   console.log(`Application is running on: ${await app.getUrl()}`);
 
   if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line no-console
     console.log(`Swagger UI is available at: ${await app.getUrl()}/api-docs`);
   }
 }
-bootstrap();
+
+void bootstrap();

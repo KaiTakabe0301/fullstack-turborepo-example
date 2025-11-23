@@ -2,14 +2,14 @@
   "$schema": "https://turborepo.com/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": ["^build", "@repo/web#generate:api"],
+      "dependsOn": ["^build", "@repo/web#generate:api", "@repo/web-api#generate:rest-api"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
     },
     "dev": {
-      "dependsOn": ["@repo/web#generate:api"],
+      "dependsOn": ["@repo/web#generate:api", "@repo/web-api#generate:rest-api"],
       "persistent": true,
       "cache": false
     },
@@ -37,6 +37,10 @@
     },
     "@repo/web#generate:api": {
       "dependsOn": ["@repo/web-api#generate:all"],
+      "cache": false
+    },
+    "@repo/web-api#generate:rest-api": {
+      "dependsOn": ["@repo/web-api#generate:schema"],
       "cache": false
     },
     "generate:all": {

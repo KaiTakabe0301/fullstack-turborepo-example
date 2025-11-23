@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 
+import type { SafeFetchOptions } from '@/lib/fetcher/safe-fetch';
 import { safeFetchAuth } from '@/lib/fetcher/safe-fetch-auth';
 
 /**
@@ -11,8 +12,13 @@ import { safeFetchAuth } from '@/lib/fetcher/safe-fetch-auth';
  *
  * @returns HelloResponse from backend API
  */
+interface ProxyPayload {
+  input: RequestInfo | URL;
+  options?: SafeFetchOptions;
+}
+
 export async function POST(req: NextRequest) {
-  const payload = await req.json();
+  const payload = (await req.json()) as ProxyPayload;
 
   const { input, options } = payload;
 

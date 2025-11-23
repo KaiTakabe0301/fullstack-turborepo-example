@@ -43,4 +43,10 @@ lerna-debug.log*
 /tsp-output
 
 # OpenAPI Generator output
-/src/generated
+/src/generated/*
+!/src/generated/.openapi-generator-ignore
+!/src/generated/tsconfig.json
+# Since the typescript-nestjs-server does not implement an authentication mechanism using BearerToken
+# the code under controllers needs to be manually modified
+!/src/generated/controllers
+

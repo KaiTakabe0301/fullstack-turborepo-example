@@ -1,5 +1,6 @@
 import type { Context } from 'hono';
 import { HTTPException } from 'hono/http-exception';
+import pino from 'pino';
 import { ZodError } from 'zod';
 
 import { TYPES } from '@/infrastructure/di/types';
@@ -24,12 +25,24 @@ export function errorHandler(err: Error, c: Context<AppEnv>) {
     logger = undefined;
   }
 
+  // Create fallback Pino logger if DI logger is unavailable
+  const fallbackLogger = pino({
+    level: 'error',
+    transport: process.env.NODE_ENV === 'production'
+      ? undefined
+      : {
+          target: 'pino-pretty',
+          options: {
+            colorize: true,
+            translateTime: 'SYS:yyyy-mm-dd HH:MM:ss.l',
+            ignore: 'pid,hostname',
+          },
+        },
+  });
+
   // Helper function to ensure logging happens even if DI logger is unavailable
   const ensureLogged = (level: 'warn' | 'error', message: string, meta: Record<string, unknown>) => {
     const logData = {
-      timestamp: new Date().toISOString(),
-      level,
-      message,
       path: c.req.path,
       method: c.req.method,
       requestId,
@@ -37,14 +50,10 @@ export function errorHandler(err: Error, c: Context<AppEnv>) {
     };
 
     if (logger) {
-      logger[level](message, meta);
+      logger[level](message, logData);
     } else {
-      // Fallback to console logging when DI logger is unavailable
-      if (process.env.NODE_ENV === 'production') {
-        console.error(JSON.stringify(logData));
-      } else {
-        console.error(`[FALLBACK ${level.toUpperCase()}] ${message}`, logData);
-      }
+      // Fallback to Pino logger when DI logger is unavailable
+      fallbackLogger[level](logData, message);
     }
   };
 
@@ -80,11 +89,9 @@ export function errorHandler(err: Error, c: Context<AppEnv>) {
     );
   }
 
-  // Log unexpected errors with full details
+  // Log unexpected errors with full details using Pino's error serialization
   ensureLogged('error', 'Unexpected Error', {
-    error: err.message,
-    stack: err.stack,
-    errorName: err.name,
+    err, // Pino automatically serializes Error objects with stack traces
   });
 
   return c.json(

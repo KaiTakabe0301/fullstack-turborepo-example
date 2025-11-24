@@ -40,6 +40,24 @@ function extractClientIp(c: Context<AppEnv>): string {
 }
 
 /**
+ * Extract user ID from request (e.g., from JWT token)
+ * This is a placeholder - implement based on your authentication strategy
+ */
+function extractUserId(c: Context<AppEnv>): string | undefined {
+  // TODO: Extract from JWT payload or session
+  // Example: const token = c.get('jwtPayload'); return token?.sub;
+  return undefined;
+}
+
+/**
+ * Get memory usage in MB
+ */
+function getMemoryUsage(): number {
+  const used = process.memoryUsage();
+  return Math.round(used.heapUsed / 1024 / 1024);
+}
+
+/**
  * Middleware to provide InversifyJS container in Hono context
  */
 export function inversifyMiddleware(): MiddlewareHandler<AppEnv> {
@@ -49,12 +67,23 @@ export function inversifyMiddleware(): MiddlewareHandler<AppEnv> {
     // Create a child container for request-scoped dependencies
     const requestContainer = rootContainer.createChild();
 
+    // Track request start time for performance metrics
+    const startTime = Date.now();
+
     // Extract correlation ID from header or generate new UUID
     const correlationId =
       c.req.header('x-correlation-id') ?? crypto.randomUUID();
 
     // Extract client IP address
     const ipAddress = extractClientIp(c);
+
+    // Extract user ID (if authenticated)
+    const userId = extractUserId(c);
+
+    // Get service metadata
+    const serviceName = process.env.npm_package_name ?? 'web-api';
+    const serviceVersion = process.env.npm_package_version ?? '0.0.0';
+    const environment = process.env.NODE_ENV ?? 'development';
 
     // Bind Logger with request-scoped instance
     // Note: Logger is only bound in request-scoped containers, not in the root container
@@ -63,6 +92,10 @@ export function inversifyMiddleware(): MiddlewareHandler<AppEnv> {
         correlationId,
         ipAddress,
         context: c.req.path,
+        userId,
+        serviceName,
+        serviceVersion,
+        environment,
       })
     );
 
@@ -70,6 +103,25 @@ export function inversifyMiddleware(): MiddlewareHandler<AppEnv> {
     c.set('container', requestContainer);
 
     await next();
+
+    // Calculate response time and log with performance metrics
+    const responseTime = Date.now() - startTime;
+    const memoryUsage = getMemoryUsage();
+
+    // Get logger from container and log request completion
+    try {
+      const logger = requestContainer.get<Logger>(TYPES.Logger);
+      logger.info('Request completed', {
+        method: c.req.method,
+        path: c.req.path,
+        status: c.res.status,
+        responseTime,
+        memoryUsage,
+      });
+    } catch {
+      // If logger is not available, silently skip logging
+      // This can happen during container cleanup
+    }
   };
 }
 

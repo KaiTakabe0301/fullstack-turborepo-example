@@ -5,7 +5,10 @@ import { cleanup as cleanupContainer } from '@/infrastructure/di/container';
 import { createLogger } from '@/infrastructure/logging/Logger';
 import app from '@/interfaces/http/server/app';
 
-const logger = createLogger('app-bootstrap');
+const logger = createLogger({
+  correlationId: crypto.randomUUID(),
+  context: 'app-bootstrap',
+});
 
 // アプリ起動前に環境変数をバリデーション
 let env;

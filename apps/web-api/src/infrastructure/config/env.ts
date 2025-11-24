@@ -26,7 +26,10 @@ export class EnvValidationError extends Error {
 }
 
 export function validateEnv(): Env {
-  const logger = createLogger('env-validation');
+  const logger = createLogger({
+    correlationId: crypto.randomUUID(),
+    context: 'env-validation',
+  });
 
   logger.info('Validating environment variables...');
 

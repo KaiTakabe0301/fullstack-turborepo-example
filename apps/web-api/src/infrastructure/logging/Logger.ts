@@ -5,8 +5,15 @@ export interface Logger {
   debug: (msg: string, meta?: Record<string, unknown>) => void;
 }
 
-export function createLogger(requestId?: string): Logger {
-  const baseMetadata = requestId ? { requestId } : {};
+export interface LoggerMetadata {
+  correlationId?: string;
+  ipAddress?: string;
+  requestSource?: string;
+  context?: string;
+}
+
+export function createLogger(metadata?: LoggerMetadata): Logger {
+  const baseMetadata = metadata ?? {};
 
   const log = (level: string, msg: string, meta?: Record<string, unknown>) => {
     const logEntry = {

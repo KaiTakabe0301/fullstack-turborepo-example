@@ -39,7 +39,6 @@ function extractClientIp(c: Context<AppEnv>): string {
   }
 }
 
-
 /**
  * Middleware to provide InversifyJS container in Hono context
  */
@@ -51,22 +50,21 @@ export function inversifyMiddleware(): MiddlewareHandler<AppEnv> {
     const requestContainer = rootContainer.createChild();
 
     // Extract correlation ID from header or generate new UUID
-    const correlationId = c.req.header('x-correlation-id') ?? crypto.randomUUID();
+    const correlationId =
+      c.req.header('x-correlation-id') ?? crypto.randomUUID();
 
     // Extract client IP address
     const ipAddress = extractClientIp(c);
 
-
     // Bind Logger with request-scoped instance
     // Note: Logger is only bound in request-scoped containers, not in the root container
-    requestContainer
-      .bind<Logger>(TYPES.Logger)
-      .toConstantValue(
-        createLogger({
-          correlationId,
-          ipAddress,
-        })
-      );
+    requestContainer.bind<Logger>(TYPES.Logger).toConstantValue(
+      createLogger({
+        correlationId,
+        ipAddress,
+        context: c.req.path,
+      })
+    );
 
     // Store container in Hono context
     c.set('container', requestContainer);

@@ -1,7 +1,5 @@
+import type { Container } from 'inversify';
 import type { JWTPayload } from 'jose';
-
-import type { Logger } from '@/infrastructure/logging/Logger';
-import type { Container } from '@/interfaces/di/container';
 
 export interface Auth0Payload extends JWTPayload {
   scope?: string;
@@ -16,6 +14,5 @@ export interface AppEnv {
   Variables: {
     user: Auth0Payload;
     container: Container;
-    logger: Logger;
   };
 }

@@ -1,8 +1,8 @@
 import { serve } from '@hono/node-server';
 
 import { EnvValidationError, getEnv } from '@/infrastructure/config/env';
+import { cleanup as cleanupContainer } from '@/infrastructure/di/container';
 import { createLogger } from '@/infrastructure/logging/Logger';
-import { disconnectPrisma } from '@/infrastructure/persistence/prisma/PrismaClient';
 import app from '@/interfaces/http/server/app';
 
 const logger = createLogger('app-bootstrap');
@@ -53,9 +53,9 @@ const shutdown = async () => {
     console.log('✅ HTTP server closed');
   });
 
-  await disconnectPrisma();
-  logger.info('Database connection closed');
-  console.log('✅ Database connection closed');
+  await cleanupContainer();
+  logger.info('DI container cleaned up and database connection closed');
+  console.log('✅ DI container cleaned up and database connection closed');
 
   logger.info('Application shutdown complete');
   process.exit(0);

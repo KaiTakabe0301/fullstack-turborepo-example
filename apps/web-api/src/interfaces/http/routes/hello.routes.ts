@@ -1,5 +1,8 @@
 import { OpenAPIHono, createRoute } from '@hono/zod-openapi';
 
+import type { GetHelloUseCase } from '@/application/hello/use-case/GetHello';
+import { TYPES } from '@/infrastructure/di/types';
+import { getContainerFromContext } from '@/interfaces/http/middleware/inversify.middleware';
 import type { AppEnv } from '@/interfaces/http/types';
 import { ErrorResponseSchema } from '@/schemas/error.schema';
 import { HelloResponseSchema } from '@/schemas/hello.schema';
@@ -35,7 +38,8 @@ const getHelloRoute = createRoute({
 });
 
 helloApp.openapi(getHelloRoute, (c) => {
-  const { getHelloUseCase } = c.var.container;
+  const container = getContainerFromContext(c);
+  const getHelloUseCase = container.get<GetHelloUseCase>(TYPES.GetHelloUseCase);
 
   const result = getHelloUseCase.execute();
 

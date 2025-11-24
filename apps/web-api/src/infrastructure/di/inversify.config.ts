@@ -12,7 +12,6 @@ import { Container } from 'inversify';
 import { GetHelloUseCase } from '@/application/hello/use-case/GetHello';
 import type { IHelloRepository } from '@/domain/hello/repositories/IHelloRepository';
 import { TYPES } from '@/infrastructure/di/types';
-import { createLogger, type Logger } from '@/infrastructure/logging/Logger';
 import { getPrismaClient } from '@/infrastructure/persistence/prisma/PrismaClient';
 import { HelloRepository } from '@/infrastructure/persistence/repositories/HelloRepository';
 
@@ -38,11 +37,8 @@ export function createContainer(): Container {
   // Singleton: PrismaClient - shared across all requests
   container.bind<PrismaClient>(TYPES.PrismaClient).toConstantValue(getPrismaClient());
 
-  // Request-scoped: Logger - unique instance per request with requestId
-  // Note: This will be overridden in middleware for request-scoped instances
-  container.bind<Logger>(TYPES.Logger).toDynamicValue(() => {
-    return createLogger();
-  });
+  // Note: Logger is not bound here as it's request-scoped.
+  // It will be bound in the request-scoped child container by inversify.middleware.ts
 
   // ========================================
   // Domain Layer - Repositories

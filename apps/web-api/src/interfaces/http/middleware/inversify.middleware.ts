@@ -26,8 +26,9 @@ export function inversifyMiddleware(): MiddlewareHandler<AppEnv> {
     // Generate unique request ID
     const requestId = crypto.randomUUID();
 
-    // Override Logger binding with request-scoped instance
-    requestContainer.rebind<Logger>(TYPES.Logger).toConstantValue(
+    // Bind Logger with request-scoped instance
+    // Note: Logger is only bound in request-scoped containers, not in the root container
+    requestContainer.bind<Logger>(TYPES.Logger).toConstantValue(
       createLogger(requestId)
     );
 

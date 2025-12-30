@@ -56,24 +56,16 @@ const loggerConfigMiddleware = createMiddleware<AppEnv>(async (c, next) => {
 
 app.use('*', loggerConfigMiddleware);
 
-// InversifyJS container middleware - provides DI container in context
-// Skip DI container for OpenAPI-related endpoints to avoid errors during spec generation
-const diContainerMiddleware = createMiddleware<AppEnv>(async (c, next) => {
-  if (isOpenAPIPath(c.req.path)) {
-    return next();
-  }
-
-  // Apply InversifyJS middleware for all other routes
-  return inversifyMiddleware()(c, next);
-});
-
-app.use('*', diContainerMiddleware);
-
 app.get('/health', (c) => {
   return c.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Define API version paths for future extensibility
+// Add new versions here as they are introduced (e.g., '/v2/*', '/v3/*')
+const apiVersionPaths = ['/v1/*', '/v2/*', '/v3/*'];
+
 // Runtime-portable Auth0 middleware initialization
+// Applied BEFORE InversifyJS middleware for all API version routes
 const auth0ConfigMiddleware = createMiddleware<AppEnv>(async (c, next) => {
   const { AUTH0_DOMAIN, AUTH0_AUDIENCE } = env<{ AUTH0_DOMAIN: string; AUTH0_AUDIENCE: string }>(c);
 
@@ -85,7 +77,27 @@ const auth0ConfigMiddleware = createMiddleware<AppEnv>(async (c, next) => {
   return authMiddleware(c, next);
 });
 
-app.use('/v1/*', auth0ConfigMiddleware);
+// Apply Auth0 middleware to all API version paths
+apiVersionPaths.forEach((path) => {
+  app.use(path, auth0ConfigMiddleware);
+});
+
+// InversifyJS container middleware - provides DI container in context
+// Applied AFTER Auth0 middleware for all API version routes so user info is available
+// Skip DI container for OpenAPI-related endpoints to avoid errors during spec generation
+const diContainerMiddleware = createMiddleware<AppEnv>(async (c, next) => {
+  if (isOpenAPIPath(c.req.path)) {
+    return next();
+  }
+
+  // Apply InversifyJS middleware
+  return inversifyMiddleware()(c, next);
+});
+
+// Apply DI container middleware to all API version paths
+apiVersionPaths.forEach((path) => {
+  app.use(path, diContainerMiddleware);
+});
 
 app.route('/v1/hello', helloApp);
 

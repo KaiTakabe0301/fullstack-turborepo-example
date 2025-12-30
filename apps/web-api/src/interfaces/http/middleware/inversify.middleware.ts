@@ -40,13 +40,17 @@ function extractClientIp(c: Context<AppEnv>): string {
 }
 
 /**
- * Extract user ID from request (e.g., from JWT token)
- * This is a placeholder - implement based on your authentication strategy
+ * Extract user ID from Auth0 JWT payload
+ * Returns undefined if user is not authenticated
  */
 function extractUserId(c: Context<AppEnv>): string | undefined {
-  // TODO: Extract from JWT payload or session
-  // Example: const token = c.get('jwtPayload'); return token?.sub;
-  return undefined;
+  try {
+    const user = c.get('user');
+    return user?.sub;
+  } catch {
+    // User not authenticated or context not available
+    return undefined;
+  }
 }
 
 /**

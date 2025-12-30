@@ -50,7 +50,10 @@ describe('GetHelloUseCase', () => {
     expect(result).toEqual({
       message: 'Hello from test!',
     });
-    expect(mockLogger.info).toHaveBeenCalledWith('GetHello use case executed');
+    expect(mockLogger.info).toHaveBeenCalledWith('GetHello use case executed', {
+      context: 'GetHelloUseCase',
+      method: 'execute',
+    });
     // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(mockHelloRepository.create).toHaveBeenCalledWith(
       'Hello from REST API with DI!',

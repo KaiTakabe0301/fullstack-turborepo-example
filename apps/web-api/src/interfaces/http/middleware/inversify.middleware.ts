@@ -91,7 +91,8 @@ export function inversifyMiddleware(): MiddlewareHandler<AppEnv> {
       createLogger({
         correlationId,
         ipAddress,
-        context: c.req.path,
+        context: 'inversify-middleware',
+        path: c.req.path,
         userId,
         serviceName,
         serviceVersion,
@@ -107,6 +108,7 @@ export function inversifyMiddleware(): MiddlewareHandler<AppEnv> {
     // Calculate response time and log with performance metrics
     const responseTime = Date.now() - startTime;
     const memoryUsage = getMemoryUsage();
+    const datetime = new Date().toISOString();
 
     // Get logger from container and log request completion
     try {
@@ -117,6 +119,7 @@ export function inversifyMiddleware(): MiddlewareHandler<AppEnv> {
         status: c.res.status,
         responseTime,
         memoryUsage,
+        datetime,
       });
     } catch {
       // If logger is not available, silently skip logging

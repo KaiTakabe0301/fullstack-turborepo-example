@@ -9,11 +9,15 @@ import type { HelloResponse } from '@/schemas/hello.schema';
 export class GetHelloUseCase {
   constructor(
     @inject(TYPES.Logger) private readonly logger: Logger,
-    @inject(TYPES.IHelloRepository) private readonly helloRepository: IHelloRepository
+    @inject(TYPES.IHelloRepository)
+    private readonly helloRepository: IHelloRepository
   ) {}
 
   execute(requestId?: string): HelloResponse {
-    this.logger.info('GetHello use case executed');
+    this.logger.info('GetHello use case executed', {
+      context: 'GetHelloUseCase',
+      method: 'execute',
+    });
 
     // Create a Hello entity through the repository
     const helloEntity = this.helloRepository.create(

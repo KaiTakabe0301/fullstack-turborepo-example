@@ -10,6 +10,7 @@ export interface Logger {
 export interface LoggerMetadata {
   correlationId?: string;
   ipAddress?: string;
+  path?: string;
   context?: string;
   userId?: string;
   serviceName?: string;
@@ -17,6 +18,7 @@ export interface LoggerMetadata {
   environment?: string;
   responseTime?: number;
   memoryUsage?: number;
+  datetime?: string;
 }
 
 // Get log level from environment or use defaults
